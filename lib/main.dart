@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pat_app/config/routes/routes.dart';
 import 'package:pat_app/config/theme/app_themes.dart';
+import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
 import 'package:pat_app/injection_container.dart';
 
 void main() async {
@@ -30,7 +31,7 @@ class MainApp extends StatelessWidget {
       theme: theme(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRoutes.onGenerateRoutes,
-      home: const Scaffold(),
+      home: const MainMenu(),
     );
   }
 }
