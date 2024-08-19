@@ -25,6 +25,14 @@ enum TextMeaning {
   quantityOfProductsInTheLastShipmentBoxHint,
   dataError,
   backForCheck,
+  name,
+  toCheckShipmentDetails,
+  cancelThisShipment,
+  proceedWithShipment,
+  chooseOneFromTheOptionsBelow,
+  deliveryDriver,
+  electronicSignature,
+  workIDPhoto,
 }
 
 class LanguageController extends GetxController {
@@ -87,6 +95,22 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "There is an ERROR in the data!\n\nPlease Re-Check!!" : "資料有錯誤!\n\n請重新檢查!";
       case TextMeaning.backForCheck:
         return getCurrentLanguage() == Language.english ? "BACK FOR CHECK" : "返回";
+      case TextMeaning.name:
+        return getCurrentLanguage() == Language.english ? "Name" : "姓名";
+      case TextMeaning.toCheckShipmentDetails:
+        return getCurrentLanguage() == Language.english ? "TO CHECK SHIPMENT DETAILS" : "出貨明細檢查";
+      case TextMeaning.cancelThisShipment:
+        return getCurrentLanguage() == Language.english ? "CANCEL THIS SHIPMENT" : "放棄本次操作";
+      case TextMeaning.proceedWithShipment:
+        return getCurrentLanguage() == Language.english ? "PROCEED WITH SHIPMENT" : "執行出貨";
+      case TextMeaning.chooseOneFromTheOptionsBelow:
+        return getCurrentLanguage() == Language.english ? "Choose one from the options below" : "下列兩種方式擇一即可";
+      case TextMeaning.deliveryDriver:
+        return getCurrentLanguage() == Language.english ? "Delivery Driver" : "收貨司機";
+      case TextMeaning.electronicSignature:
+        return getCurrentLanguage() == Language.english ? "ELECTRONIC SIGNATURE" : "電子簽名";
+      case TextMeaning.workIDPhoto:
+        return getCurrentLanguage() == Language.english ? "WORK ID PHOTO" : "工作證拍照";
       default:
         return "BUTTON";
     }

@@ -23,7 +23,7 @@ class SelectEntries extends StatefulWidget {
 }
 
 class _SelectEntriesState extends State<SelectEntries> {
-  final List<RC> _selectedRCsList = [];
+  late List<RC> _selectedRCsList;
   final TextEditingController _searchController = TextEditingController();
 
   void _selectOrDeselectRC(RC rc) {
@@ -48,6 +48,7 @@ class _SelectEntriesState extends State<SelectEntries> {
 
   @override
   void initState() {
+    _selectedRCsList = sl<SelectedRCsListController>().getSelectedRCsList();
     _searchController.addListener(() => setState(() {}));
     super.initState();
   }

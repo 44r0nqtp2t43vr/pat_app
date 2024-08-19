@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
+import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_text_field.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_event.dart';
+import 'package:pat_app/injection_container.dart';
 
 class UserLogin extends StatefulWidget {
   const UserLogin({super.key});
@@ -19,6 +21,7 @@ class _UserLoginState extends State<UserLogin> {
 
   void _loginUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      sl<SelectedRCsListController>().setSelectedRCsList([]);
       BlocProvider.of<EmployeeBloc>(context).add(LoginEmployeeEvent(_employeeIDController.text));
       Navigator.pushNamed(context, '/selectEntries');
     }

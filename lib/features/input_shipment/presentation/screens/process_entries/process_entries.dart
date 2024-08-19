@@ -33,10 +33,37 @@ class _ProcessEntriesState extends State<ProcessEntries> {
       });
     } else {
       if (_formKey.currentState!.validate()) {
-        // BlocProvider.of<EmployeeBloc>(context).add(LoginEmployeeEvent(_employeeIDController.text));
-        // Navigator.pushNamed(context, '/selectEntries');
+        if (_isDataValid()) {
+          sl<SelectedRCsListController>().setSelectedRCAtIndex(entry, widget.entryIndex);
+          Navigator.pushNamed(context, '/confirmShipment');
+        } else {
+          Navigator.pushNamed(context, '/dataError');
+        }
       }
     }
+  }
+
+  bool _isDataValid() {
+    final numOfProducts = entry.numberOfProducts;
+    final numOfProductsInLastShipmentBox = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
+    final numOfShipmentBoxes = int.tryParse(_quantityOfProductsInTheLastShipmentBox.text.trim());
+
+    if (numOfProductsInLastShipmentBox == null || numOfShipmentBoxes == null) {
+      return false;
+    }
+
+    final remainder = (numOfProducts - numOfProductsInLastShipmentBox) % (numOfShipmentBoxes - 1);
+
+    if (remainder != 0) {
+      return false;
+    }
+
+    setState(() {
+      entry.numberOfLastShipmentBoxProducts = numOfProductsInLastShipmentBox;
+      entry.numberOfShipmentBoxes = numOfShipmentBoxes;
+    });
+
+    return true;
   }
 
   @override
@@ -45,6 +72,8 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     _rcnoController.text = entry.rcno;
     _customerNameController.text = entry.customerName;
     _productPartNumberController.text = entry.productPartNumber;
+    _totalNumberOfShipmentBoxesController.text = entry.numberOfShipmentBoxes == null ? "" : entry.numberOfShipmentBoxes.toString();
+    _quantityOfProductsInTheLastShipmentBox.text = entry.numberOfLastShipmentBoxProducts == null ? "" : entry.numberOfLastShipmentBoxProducts.toString();
     super.initState();
   }
 

@@ -24,35 +24,35 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       await Future.delayed(const Duration(seconds: 1));
 
       return Future.value([
-        const RC(
+        RC(
           rcno: "P0000000001",
           date: "2024-01-30",
           customerName: "JUMJUM",
           productPartNumber: "123456",
           numberOfProducts: 100,
         ),
-        const RC(
+        RC(
           rcno: "P0000000002",
           date: "2024-01-29",
           customerName: "JUMJUM",
           productPartNumber: "123456",
           numberOfProducts: 100,
         ),
-        const RC(
+        RC(
           rcno: "P0000000003",
           date: "2024-01-28",
           customerName: "JUMJUM",
           productPartNumber: "123456",
           numberOfProducts: 100,
         ),
-        const RC(
+        RC(
           rcno: "P0000000004",
           date: "2024-01-27",
           customerName: "JUMJUM",
           productPartNumber: "123456",
           numberOfProducts: 100,
         ),
-        const RC(
+        RC(
           rcno: "P0000000005",
           date: "2024-01-26",
           customerName: "JUMJUM",

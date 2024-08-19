@@ -4,10 +4,10 @@ class RC {
   final String customerName;
   final String productPartNumber;
   final int numberOfProducts;
-  final int? numberOfShipmentBoxes;
-  final int? numberOfLastShipmentBoxProducts;
+  int? numberOfShipmentBoxes;
+  int? numberOfLastShipmentBoxProducts;
 
-  const RC({
+  RC({
     required this.rcno,
     required this.date,
     required this.customerName,
