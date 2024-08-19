@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/user_login/user_login.dart';
+import 'package:pat_app/features/input_shipment/presentation/screens/process_entries/process_entries.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/select_entries/select_entries.dart';
 
 class AppRoutes {
@@ -14,6 +15,9 @@ class AppRoutes {
 
       case '/selectEntries':
         return _materialRoute(const SelectEntries());
+
+      case '/processEntries':
+        return _materialRoute(ProcessEntries(entryIndex: settings.arguments as int));
 
       default:
         return _materialRoute(const MainMenu());

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
+import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_button_freetext.dart';
 import 'package:pat_app/core/widgets/app_error_container.dart';
@@ -12,6 +13,7 @@ import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_event.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_state.dart';
+import 'package:pat_app/injection_container.dart';
 
 class SelectEntries extends StatefulWidget {
   const SelectEntries({super.key});
@@ -34,6 +36,13 @@ class _SelectEntriesState extends State<SelectEntries> {
       setState(() {
         _selectedRCsList.add(rc);
       });
+    }
+  }
+
+  void _confirmSelected(BuildContext context) {
+    if (_selectedRCsList.isNotEmpty) {
+      sl<SelectedRCsListController>().setSelectedRCsList(_selectedRCsList);
+      Navigator.pushNamed(context, '/processEntries', arguments: 0);
     }
   }
 
@@ -101,7 +110,7 @@ class _SelectEntriesState extends State<SelectEntries> {
                   ),
                   const SizedBox(height: 20),
                   AppButton(
-                    onPressed: () {},
+                    onPressed: () => _confirmSelected(context),
                     textMeaning: TextMeaning.confirm,
                   ),
                 ],
