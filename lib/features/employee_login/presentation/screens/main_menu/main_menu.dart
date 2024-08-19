@@ -28,7 +28,7 @@ class MainMenu extends StatelessWidget {
               ),
             ),
             AppButton(
-              onPressed: () => _onInputIDButtonPressed(context),
+              onPressed: () => _onUserLoginButtonPressed(context),
               textMeaning: TextMeaning.userLogin,
             ),
             AppButton(
@@ -55,8 +55,8 @@ class MainMenu extends StatelessWidget {
     sl<LanguageController>().toggleCurrentLanguage();
   }
 
-  void _onInputIDButtonPressed(BuildContext context) {
-    Navigator.pushNamed(context, '/inputID');
+  void _onUserLoginButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/userLogin');
   }
 
   void _onExitButtonPressed(BuildContext context) {

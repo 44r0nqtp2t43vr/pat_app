@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/config/routes/routes.dart';
 import 'package:pat_app/config/theme/app_themes.dart';
+import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
 import 'package:pat_app/injection_container.dart';
 
@@ -14,24 +16,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MultiBlocProvider(
-    //   providers: const [],
-    //   child: MaterialApp(
-    //     theme: theme(),
-    //     debugShowCheckedModeBanner: false,
-    //     onGenerateRoute: AppRoutes.onGenerateRoutes,
-    //     home: const Scaffold(
-    //       body: Center(
-    //         child: Text('Hello World!'),
-    //       ),
-    //     ),
-    //   ),
-    // );
-    return MaterialApp(
-      theme: theme(),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: AppRoutes.onGenerateRoutes,
-      home: const MainMenu(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<EmployeeBloc>(create: (BuildContext context) => sl()),
+      ],
+      child: MaterialApp(
+        theme: theme(),
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: AppRoutes.onGenerateRoutes,
+        home: const MainMenu(),
+      ),
     );
   }
 }
