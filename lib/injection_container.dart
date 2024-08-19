@@ -5,6 +5,8 @@ import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/repository/database_repository.dart';
 import 'package:pat_app/features/employee_login/domain/usecases/login_employee.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
+import 'package:pat_app/features/input_shipment/domain/usecases/get_rcs_list.dart';
+import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -21,7 +23,11 @@ Future<void> initializeDependencies() async {
 
   sl.registerSingleton<LoginEmployeeUseCase>(LoginEmployeeUseCase(sl()));
 
+  sl.registerSingleton<GetRCsListUseCase>(GetRCsListUseCase(sl()));
+
   // Blocs
 
   sl.registerFactory<EmployeeBloc>(() => EmployeeBloc(sl()));
+
+  sl.registerFactory<RCsListBloc>(() => RCsListBloc(sl()));
 }
