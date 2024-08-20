@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/resources/formatters.dart';
 import 'package:pat_app/features/employee_login/domain/models/employee.dart';
@@ -14,6 +17,10 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       }
 
       return Future.value(const Employee(id: "EMPLOYEE#0001", name: "JUMAR"));
+    } on SocketException catch (_) {
+      throw const SocketException("");
+    } on TimeoutException catch (_) {
+      throw TimeoutException("");
     } catch (e) {
       return Future.value(null);
     }
@@ -67,6 +74,10 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       });
 
       return Future.value(sampleData);
+    } on SocketException catch (_) {
+      throw const SocketException("");
+    } on TimeoutException catch (_) {
+      throw TimeoutException("");
     } catch (e) {
       return Future.value([]);
     }

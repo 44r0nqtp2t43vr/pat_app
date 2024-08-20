@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/usecase/usecase.dart';
 import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
@@ -12,13 +14,7 @@ class GetRCsListUseCase implements UseCase<List<RC>, void> {
     try {
       return _databaseRepository.getRCsList();
     } catch (e) {
-      throw GetRCsListException(e.toString());
+      rethrow;
     }
   }
-}
-
-class GetRCsListException implements Exception {
-  final String message;
-
-  GetRCsListException(this.message);
 }

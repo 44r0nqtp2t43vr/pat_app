@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/usecase/usecase.dart';
 import 'package:pat_app/features/employee_login/domain/models/employee.dart';
@@ -9,6 +11,10 @@ class LoginEmployeeUseCase implements UseCase<Employee?, String?> {
 
   @override
   Future<Employee?> call({String? params}) {
-    return _databaseRepository.loginEmployee(params!);
+    try {
+      return _databaseRepository.loginEmployee(params!);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

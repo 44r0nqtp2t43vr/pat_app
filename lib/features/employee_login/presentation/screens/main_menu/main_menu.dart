@@ -52,7 +52,7 @@ class MainMenu extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _onSetupButtonPressed(context),
                   child: const Icon(
                     Icons.settings,
                     size: 28,
@@ -76,5 +76,9 @@ class MainMenu extends StatelessWidget {
 
   void _onExitButtonPressed(BuildContext context) {
     SystemNavigator.pop();
+  }
+
+  void _onSetupButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/inputPassword');
   }
 }

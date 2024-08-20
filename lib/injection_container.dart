@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
+import 'package:pat_app/core/controllers/setup_controller.dart';
 import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/repository/database_repository.dart';
 import 'package:pat_app/features/employee_login/domain/usecases/login_employee.dart';
@@ -23,6 +24,10 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<SelectedRCsListController>(SelectedRCsListController());
 
   Get.put<SelectedRCsListController>(sl());
+
+  sl.registerSingleton<SetupController>(SetupController());
+
+  Get.put<SetupController>(sl());
 
   // UseCases
 

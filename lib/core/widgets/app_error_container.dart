@@ -6,11 +6,13 @@ import 'package:pat_app/core/widgets/app_button.dart';
 class AppErrorContainer extends StatelessWidget {
   final TextMeaning errorTextMeaning;
   final TextMeaning buttonTextMeaning;
+  final Function(BuildContext)? onPop;
 
   const AppErrorContainer({
     super.key,
     required this.errorTextMeaning,
     required this.buttonTextMeaning,
+    this.onPop,
   });
 
   @override
@@ -32,7 +34,7 @@ class AppErrorContainer extends StatelessWidget {
           },
         ),
         AppButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: onPop == null ? () => Navigator.of(context).pop() : () => onPop!(context),
           textMeaning: buttonTextMeaning,
         ),
       ],

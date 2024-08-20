@@ -37,6 +37,13 @@ enum TextMeaning {
   clear,
   takePhoto,
   retakePhoto,
+  setup,
+  serverIP,
+  timeoutSetting,
+  storage,
+  manualSyn,
+  networkConnectionError,
+  employeeIDError,
 }
 
 class LanguageController extends GetxController {
@@ -161,6 +168,20 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "TAKE PHOTO" : "拍照";
       case TextMeaning.retakePhoto:
         return getCurrentLanguage() == Language.english ? "RE-TAKE" : "重拍";
+      case TextMeaning.setup:
+        return getCurrentLanguage() == Language.english ? "SETUP" : "設定";
+      case TextMeaning.serverIP:
+        return getCurrentLanguage() == Language.english ? "Server IP" : "Server IP";
+      case TextMeaning.timeoutSetting:
+        return getCurrentLanguage() == Language.english ? "Time Out Setting (sec)" : "與伺服器溝通等待時間 (秒)";
+      case TextMeaning.storage:
+        return getCurrentLanguage() == Language.english ? "STORAGE" : "儲存";
+      case TextMeaning.manualSyn:
+        return getCurrentLanguage() == Language.english ? "MANUAL SYN" : "手動同步";
+      case TextMeaning.networkConnectionError:
+        return getCurrentLanguage() == Language.english ? "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!" : "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!";
+      case TextMeaning.employeeIDError:
+        return getCurrentLanguage() == Language.english ? "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!" : "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!";
       default:
         return "BUTTON";
     }
