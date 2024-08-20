@@ -17,57 +17,72 @@ class ConfirmShipment extends StatelessWidget {
   Widget build(BuildContext context) {
     final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 40.0,
-          bottom: 40.0,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                AppLabelledText(
-                  label: TextMeaning.employeeID,
-                  value: employee.id,
-                ),
-                AppLabelledText(
-                  label: TextMeaning.name,
-                  value: employee.name,
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: AppTimer(),
-                ),
-                const SizedBox(height: 20),
-                AppBigButton(
-                  onPressed: () {},
-                  textMeaning: TextMeaning.toCheckShipmentDetails,
-                ),
-                const SizedBox(height: 20),
-                AppBigButton(
-                  onPressed: () => _onCancelButtonPressed(context),
-                  textMeaning: TextMeaning.cancelThisShipment,
-                ),
-                const SizedBox(height: 20),
-                AppBigButton(
-                  onPressed: () => _onProceedButtonPressed(context),
-                  textMeaning: TextMeaning.proceedWithShipment,
-                ),
-              ],
-            ),
-          ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        }
+
+        sl<SelectedRCsListController>().setEntryIndex(sl<SelectedRCsListController>().getSelectedRCsCount() - 1);
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 40.0,
+            bottom: 40.0,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  AppLabelledText(
+                    label: TextMeaning.employeeID,
+                    value: employee.id,
+                  ),
+                  AppLabelledText(
+                    label: TextMeaning.name,
+                    value: employee.name,
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: AppTimer(),
+                  ),
+                  const SizedBox(height: 20),
+                  AppBigButton(
+                    onPressed: () => _onCheckButtonPressed(context),
+                    textMeaning: TextMeaning.toCheckShipmentDetails,
+                  ),
+                  const SizedBox(height: 20),
+                  AppBigButton(
+                    onPressed: () => _onCancelButtonPressed(context),
+                    textMeaning: TextMeaning.cancelThisShipment,
+                  ),
+                  const SizedBox(height: 20),
+                  AppBigButton(
+                    onPressed: () => _onProceedButtonPressed(context),
+                    textMeaning: TextMeaning.proceedWithShipment,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _onCheckButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/checkShipment');
   }
 
   void _onCancelButtonPressed(BuildContext context) {

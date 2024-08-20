@@ -1,4 +1,5 @@
 import 'package:pat_app/core/interface/database_repository.dart';
+import 'package:pat_app/core/resources/formatters.dart';
 import 'package:pat_app/features/employee_login/domain/models/employee.dart';
 import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 
@@ -23,7 +24,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     try {
       await Future.delayed(const Duration(seconds: 1));
 
-      return Future.value([
+      final sampleData = [
         RC(
           rcno: "P0000000001",
           date: "2024-01-30",
@@ -59,7 +60,13 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
           productPartNumber: "123456",
           numberOfProducts: 100,
         ),
-      ]);
+      ];
+
+      sampleData.sort((a, b) {
+        return stringToDateTime(a.date).compareTo(stringToDateTime(b.date));
+      });
+
+      return Future.value(sampleData);
     } catch (e) {
       return Future.value([]);
     }

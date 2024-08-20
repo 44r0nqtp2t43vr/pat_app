@@ -33,6 +33,7 @@ enum TextMeaning {
   deliveryDriver,
   electronicSignature,
   workIDPhoto,
+  modification,
 }
 
 class LanguageController extends GetxController {
@@ -111,6 +112,8 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "ELECTRONIC SIGNATURE" : "電子簽名";
       case TextMeaning.workIDPhoto:
         return getCurrentLanguage() == Language.english ? "WORK ID PHOTO" : "工作證拍照";
+      case TextMeaning.modification:
+        return getCurrentLanguage() == Language.english ? "MODIFICATION" : "修改";
       default:
         return "BUTTON";
     }

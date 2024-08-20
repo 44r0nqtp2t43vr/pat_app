@@ -14,3 +14,7 @@ String stringToFilename(String dateString) {
   final list = dateString.split('-');
   return '${list[0]}${list[1]}';
 }
+
+DateTime stringToDateTime(String dateString) {
+  return DateTime.parse(dateString);
+}
