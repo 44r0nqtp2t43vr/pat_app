@@ -20,7 +20,7 @@ class AppRoutes {
         return _materialRoute(const SelectEntries());
 
       case '/processEntries':
-        return _materialRoute(ProcessEntries(entryIndex: settings.arguments as int));
+        return _materialRoute(const ProcessEntries());
 
       case '/dataError':
         return _materialRoute(const DataError());

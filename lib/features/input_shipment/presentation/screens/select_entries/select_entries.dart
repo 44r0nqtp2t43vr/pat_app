@@ -42,7 +42,7 @@ class _SelectEntriesState extends State<SelectEntries> {
   void _confirmSelected(BuildContext context) {
     if (_selectedRCsList.isNotEmpty) {
       sl<SelectedRCsListController>().setSelectedRCsList(_selectedRCsList);
-      Navigator.pushNamed(context, '/processEntries', arguments: 0);
+      Navigator.pushNamed(context, '/processEntries');
     }
   }
 
@@ -55,76 +55,90 @@ class _SelectEntriesState extends State<SelectEntries> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 20.0,
-          bottom: 40.0,
-        ),
-        child: BlocConsumer<EmployeeBloc, EmployeeState>(
-          listener: (context, state) {
-            if (state is EmployeeDone) {
-              BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
-            }
-          },
-          builder: (context, state) {
-            if (state is EmployeeDone) {
-              return Column(
-                children: [
-                  AppSearchBox(
-                    labelText: TextMeaning.rcNo,
-                    textController: _searchController,
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: BlocBuilder<RCsListBloc, RCsListState>(
-                      builder: (context, state) {
-                        if (state is RCsListDone) {
-                          final filteredRCsList = state.rcsList!.where((rc) => rc.rcno.contains(_searchController.text)).toList();
+    final isEntryIndexNull = sl<SelectedRCsListController>().isEntryIndexNull();
 
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: filteredRCsList.length,
-                            itemBuilder: (context, index) {
-                              final rc = filteredRCsList[index];
+    return PopScope(
+      canPop: isEntryIndexNull ? false : true,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        }
 
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: AppButtonFreetext(
-                                  onPressed: () => _selectOrDeselectRC(rc),
-                                  text: rc.rcno,
-                                  backgroundColor: _selectedRCsList.indexWhere((selectedRC) => selectedRC.rcno == rc.rcno) >= 0 ? Colors.blue[200] : null,
-                                ),
-                              );
-                            },
-                          );
-                        }
-                        if (state is RCsListError) {
-                          return const Center(child: CupertinoActivityIndicator());
-                        }
-                        return const Center(child: CupertinoActivityIndicator());
-                      },
+        if (isEntryIndexNull) {
+          Navigator.pushReplacementNamed(context, '/userLogin');
+        }
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+            bottom: 40.0,
+          ),
+          child: BlocConsumer<EmployeeBloc, EmployeeState>(
+            listener: (context, state) {
+              if (state is EmployeeDone) {
+                BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
+              }
+            },
+            builder: (context, state) {
+              if (state is EmployeeDone) {
+                return Column(
+                  children: [
+                    AppSearchBox(
+                      labelText: TextMeaning.rcNo,
+                      textController: _searchController,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  AppButton(
-                    onPressed: () => _confirmSelected(context),
-                    textMeaning: TextMeaning.confirm,
-                  ),
-                ],
-              );
-            }
-            if (state is EmployeeError) {
-              return const AppErrorContainer(
-                errorTextMeaning: TextMeaning.passwordError,
-                buttonTextMeaning: TextMeaning.password,
-              );
-            }
-            return const Center(child: CupertinoActivityIndicator());
-          },
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: BlocBuilder<RCsListBloc, RCsListState>(
+                        builder: (context, state) {
+                          if (state is RCsListDone) {
+                            final filteredRCsList = state.rcsList!.where((rc) => rc.rcno.contains(_searchController.text)).toList();
+
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: filteredRCsList.length,
+                              itemBuilder: (context, index) {
+                                final rc = filteredRCsList[index];
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: AppButtonFreetext(
+                                    onPressed: () => _selectOrDeselectRC(rc),
+                                    text: rc.rcno,
+                                    backgroundColor: _selectedRCsList.indexWhere((selectedRC) => selectedRC.rcno == rc.rcno) >= 0 ? Colors.blue[200] : null,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          if (state is RCsListError) {
+                            return const Center(child: CupertinoActivityIndicator());
+                          }
+                          return const Center(child: CupertinoActivityIndicator());
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    AppButton(
+                      onPressed: () => _confirmSelected(context),
+                      textMeaning: TextMeaning.confirm,
+                    ),
+                  ],
+                );
+              }
+              if (state is EmployeeError) {
+                return const AppErrorContainer(
+                  errorTextMeaning: TextMeaning.passwordError,
+                  buttonTextMeaning: TextMeaning.password,
+                );
+              }
+              return const Center(child: CupertinoActivityIndicator());
+            },
+          ),
         ),
       ),
     );

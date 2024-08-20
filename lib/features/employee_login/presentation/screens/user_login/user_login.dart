@@ -29,23 +29,37 @@ class _UserLoginState extends State<UserLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              AppTextField(
-                controller: _employeeIDController,
-                mainLabel: TextMeaning.employeeID,
-              ),
-              AppButton(
-                onPressed: () => _loginUser(context),
-                textMeaning: TextMeaning.login,
-              ),
-            ],
+    final isEntryIndexNull = sl<SelectedRCsListController>().isEntryIndexNull();
+
+    return PopScope(
+      canPop: isEntryIndexNull ? false : true,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        }
+
+        if (isEntryIndexNull) {
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      },
+      child: Scaffold(
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AppTextField(
+                  controller: _employeeIDController,
+                  mainLabel: TextMeaning.employeeID,
+                ),
+                AppButton(
+                  onPressed: () => _loginUser(context),
+                  textMeaning: TextMeaning.login,
+                ),
+              ],
+            ),
           ),
         ),
       ),
