@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
+import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_big_button.dart';
 import 'package:pat_app/core/widgets/app_labelled_text.dart';
 import 'package:pat_app/core/widgets/app_timer.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
+import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
+import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_event.dart';
+import 'package:pat_app/injection_container.dart';
 
 class ConfirmShipment extends StatelessWidget {
   const ConfirmShipment({super.key});
@@ -50,7 +54,7 @@ class ConfirmShipment extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 AppBigButton(
-                  onPressed: () {},
+                  onPressed: () => _onCancelButtonPressed(context),
                   textMeaning: TextMeaning.cancelThisShipment,
                 ),
                 const SizedBox(height: 20),
@@ -64,6 +68,12 @@ class ConfirmShipment extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onCancelButtonPressed(BuildContext context) {
+    sl<SelectedRCsListController>().setSelectedRCsList([]);
+    BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
+    Navigator.pushNamed(context, '/selectEntries');
   }
 
   void _onProceedButtonPressed(BuildContext context) {

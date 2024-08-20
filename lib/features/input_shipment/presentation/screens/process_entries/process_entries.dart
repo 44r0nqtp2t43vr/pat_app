@@ -7,9 +7,7 @@ import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 import 'package:pat_app/injection_container.dart';
 
 class ProcessEntries extends StatefulWidget {
-  final int entryIndex;
-
-  const ProcessEntries({super.key, required this.entryIndex});
+  const ProcessEntries({super.key});
 
   @override
   State<ProcessEntries> createState() => _ProcessEntriesState();
@@ -34,7 +32,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     } else {
       if (_formKey.currentState!.validate()) {
         if (_isDataValid()) {
-          sl<SelectedRCsListController>().setSelectedRCAtIndex(entry, widget.entryIndex);
+          sl<SelectedRCsListController>().setSelectedRCAtIndex(entry);
           Navigator.pushNamed(context, '/confirmShipment');
         } else {
           Navigator.pushNamed(context, '/dataError');
@@ -68,7 +66,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
 
   @override
   void initState() {
-    entry = sl<SelectedRCsListController>().getSelectedRCAtIndex(widget.entryIndex);
+    entry = sl<SelectedRCsListController>().getSelectedRCAtIndex()!;
     _rcnoController.text = entry.rcno;
     _customerNameController.text = entry.customerName;
     _productPartNumberController.text = entry.productPartNumber;
