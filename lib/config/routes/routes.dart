@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/user_login/user_login.dart';
+import 'package:pat_app/features/input_shipment/presentation/screens/check_shipment/check_shipment.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/confirm_shipment/confirm_shipment.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/data_error/data_error.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/process_entries/process_entries.dart';
@@ -27,6 +28,9 @@ class AppRoutes {
 
       case '/confirmShipment':
         return _materialRoute(const ConfirmShipment());
+
+      case '/checkShipment':
+        return _materialRoute(const CheckShipment());
 
       case '/deliveryDriver':
         return _materialRoute(const DeliveryDriver());

@@ -50,8 +50,8 @@ class _ProcessEntriesState extends State<ProcessEntries> {
 
   bool _isDataValid() {
     final numOfProducts = entry.numberOfProducts;
-    final numOfProductsInLastShipmentBox = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
-    final numOfShipmentBoxes = int.tryParse(_quantityOfProductsInTheLastShipmentBox.text.trim());
+    final numOfProductsInLastShipmentBox = int.tryParse(_quantityOfProductsInTheLastShipmentBox.text.trim());
+    final numOfShipmentBoxes = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
 
     if (numOfProductsInLastShipmentBox == null || numOfShipmentBoxes == null || numOfShipmentBoxes == 1) {
       return false;
