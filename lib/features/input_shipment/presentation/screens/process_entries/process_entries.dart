@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
+import 'package:pat_app/core/widgets/app_labelled_text.dart';
 import 'package:pat_app/core/widgets/app_text_field.dart';
 import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 import 'package:pat_app/injection_container.dart';
@@ -15,6 +16,7 @@ class ProcessEntries extends StatefulWidget {
 
 class _ProcessEntriesState extends State<ProcessEntries> {
   late RC entry;
+  late int count;
   bool isFirstPage = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -32,8 +34,13 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     } else {
       if (_formKey.currentState!.validate()) {
         if (_isDataValid()) {
-          sl<SelectedRCsListController>().setSelectedRCAtIndex(entry);
-          Navigator.pushNamed(context, '/confirmShipment');
+          if (sl<SelectedRCsListController>().isEntryIndexLast()) {
+            sl<SelectedRCsListController>().setSelectedRCAtIndex(entry);
+            Navigator.pushNamed(context, '/confirmShipment');
+          } else {
+            sl<SelectedRCsListController>().incrementEntryIndex();
+            Navigator.pushNamed(context, '/processEntries');
+          }
         } else {
           Navigator.pushNamed(context, '/dataError');
         }
@@ -46,7 +53,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     final numOfProductsInLastShipmentBox = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
     final numOfShipmentBoxes = int.tryParse(_quantityOfProductsInTheLastShipmentBox.text.trim());
 
-    if (numOfProductsInLastShipmentBox == null || numOfShipmentBoxes == null) {
+    if (numOfProductsInLastShipmentBox == null || numOfShipmentBoxes == null || numOfShipmentBoxes == 1) {
       return false;
     }
 
@@ -67,11 +74,14 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   @override
   void initState() {
     entry = sl<SelectedRCsListController>().getSelectedRCAtIndex()!;
+    count = sl<SelectedRCsListController>().getSelectedRCsCount();
+
     _rcnoController.text = entry.rcno;
     _customerNameController.text = entry.customerName;
     _productPartNumberController.text = entry.productPartNumber;
     _totalNumberOfShipmentBoxesController.text = entry.numberOfShipmentBoxes == null ? "" : entry.numberOfShipmentBoxes.toString();
     _quantityOfProductsInTheLastShipmentBox.text = entry.numberOfLastShipmentBoxProducts == null ? "" : entry.numberOfLastShipmentBoxProducts.toString();
+
     super.initState();
   }
 
@@ -85,6 +95,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
         }
 
         if (isFirstPage) {
+          sl<SelectedRCsListController>().decrementEntryIndex();
           Navigator.of(context).pop();
         } else {
           setState(() {
@@ -110,6 +121,29 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                     child: Column(
                       children: isFirstPage
                           ? [
+                              count > 1
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 20, bottom: 40),
+                                      child: Column(
+                                        children: [
+                                          AppLabelledText(
+                                            label: TextMeaning.numberOfEntriesSelectedInBatch,
+                                            value: count.toString(),
+                                            englishLabelFlex: 6,
+                                            chineseLabelFlex: 6,
+                                            valueFlex: 4,
+                                          ),
+                                          AppLabelledText(
+                                            label: TextMeaning.processingEntryNumber,
+                                            value: "${sl<SelectedRCsListController>().getEntryIndex()! + 1}",
+                                            englishLabelFlex: 6,
+                                            chineseLabelFlex: 6,
+                                            valueFlex: 4,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox(),
                               AppTextField(
                                 controller: _rcnoController,
                                 mainLabel: TextMeaning.rcNo,

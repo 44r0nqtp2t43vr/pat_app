@@ -13,6 +13,10 @@ class SelectedRCsListController extends GetxController {
     return entryIndex.value;
   }
 
+  int getSelectedRCsCount() {
+    return selectedRCsList.length;
+  }
+
   void setSelectedRCsList(List<RC> newSelectedRCsList) {
     selectedRCsList.assignAll(newSelectedRCsList);
 
@@ -23,9 +27,23 @@ class SelectedRCsListController extends GetxController {
     }
   }
 
-  void setEntryIndex(int newEntryIndex) {
-    if (newEntryIndex >= 0 || newEntryIndex < getSelectedRCsList().length) {
+  void setEntryIndex(int? newEntryIndex) {
+    if (newEntryIndex == null || newEntryIndex >= 0 || newEntryIndex < getSelectedRCsList().length) {
       entryIndex.value = newEntryIndex;
+    }
+  }
+
+  void incrementEntryIndex() {
+    if (entryIndex.value != null && entryIndex.value! >= 0 && entryIndex.value! < getSelectedRCsList().length - 1) {
+      entryIndex.value = entryIndex.value! + 1;
+    }
+  }
+
+  void decrementEntryIndex() {
+    if (entryIndex.value != null && entryIndex.value! > 0 && entryIndex.value! < getSelectedRCsList().length) {
+      entryIndex.value = entryIndex.value! - 1;
+    } else if (entryIndex.value != null && entryIndex.value! == 0) {
+      entryIndex.value = null;
     }
   }
 
@@ -45,5 +63,9 @@ class SelectedRCsListController extends GetxController {
 
   bool isEntryIndexNull() {
     return entryIndex.value == null;
+  }
+
+  bool isEntryIndexLast() {
+    return entryIndex.value == getSelectedRCsList().length - 1;
   }
 }

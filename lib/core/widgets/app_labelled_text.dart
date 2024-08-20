@@ -5,14 +5,16 @@ import 'package:pat_app/core/controllers/language_controller.dart';
 class AppLabelledText extends StatelessWidget {
   final TextMeaning label;
   final String value;
-  final int labelFlex;
+  final int englishLabelFlex;
+  final int chineseLabelFlex;
   final int valueFlex;
 
   const AppLabelledText({
     super.key,
     required this.label,
     required this.value,
-    this.labelFlex = 4,
+    this.englishLabelFlex = 4,
+    this.chineseLabelFlex = 2,
     this.valueFlex = 6,
   });
 
@@ -25,7 +27,7 @@ class AppLabelledText extends StatelessWidget {
         return Row(
           children: [
             Expanded(
-              flex: controller.getCurrentLanguage() == Language.english ? labelFlex : labelFlex ~/ 2,
+              flex: controller.getCurrentLanguage() == Language.english ? englishLabelFlex : chineseLabelFlex,
               child: Text(
                 "${controller.translate(label)}:",
                 textAlign: TextAlign.right,
