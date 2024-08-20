@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pat_app/features/employee_login/presentation/screens/employee_id_error/employee_id_error.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
+import 'package:pat_app/features/employee_login/presentation/screens/network_error/network_error.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/user_login/user_login.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/check_shipment/check_shipment.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/confirm_shipment/confirm_shipment.dart';
@@ -25,6 +27,12 @@ class AppRoutes {
 
       case '/passwordError':
         return _materialRoute(const PasswordError());
+
+      case '/networkError':
+        return _materialRoute(NetworkError(state: settings.arguments as dynamic));
+
+      case '/employeeIDError':
+        return _materialRoute(const EmployeeIDError());
 
       case '/userLogin':
         return _materialRoute(const UserLogin());

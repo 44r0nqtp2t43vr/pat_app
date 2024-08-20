@@ -39,6 +39,8 @@ enum TextMeaning {
   timeoutSetting,
   storage,
   manualSyn,
+  networkConnectionError,
+  employeeIDError,
 }
 
 class LanguageController extends GetxController {
@@ -129,6 +131,10 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "STORAGE" : "儲存";
       case TextMeaning.manualSyn:
         return getCurrentLanguage() == Language.english ? "MANUAL SYN" : "手動同步";
+      case TextMeaning.networkConnectionError:
+        return getCurrentLanguage() == Language.english ? "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!" : "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!";
+      case TextMeaning.employeeIDError:
+        return getCurrentLanguage() == Language.english ? "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!" : "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!";
       default:
         return "BUTTON";
     }

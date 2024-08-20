@@ -19,7 +19,7 @@ class RCsListBloc extends Bloc<RCsListEvent, RCsListState> {
       final rcsList = await _getRCsListUseCase();
       emit(RCsListDone(rcsList: rcsList));
     } catch (e) {
-      emit(RCsListError(errorMessage: e.toString()));
+      emit(RCsListError(exception: e));
     }
   }
 }

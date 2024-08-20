@@ -3,12 +3,12 @@ import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 
 abstract class RCsListState extends Equatable {
   final List<RC>? rcsList;
-  final String? errorMessage;
+  final dynamic exception;
 
-  const RCsListState({this.rcsList, this.errorMessage});
+  const RCsListState({this.rcsList, this.exception});
 
   @override
-  List<Object> get props => [rcsList!, errorMessage!];
+  List<Object> get props => [rcsList!, exception!];
 }
 
 class RCsListLoading extends RCsListState {
@@ -20,5 +20,5 @@ class RCsListDone extends RCsListState {
 }
 
 class RCsListError extends RCsListState {
-  const RCsListError({String? errorMessage}) : super(errorMessage: errorMessage);
+  const RCsListError({dynamic exception}) : super(exception: exception);
 }

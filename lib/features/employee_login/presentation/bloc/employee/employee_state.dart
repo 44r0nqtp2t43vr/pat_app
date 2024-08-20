@@ -3,12 +3,12 @@ import 'package:pat_app/features/employee_login/domain/models/employee.dart';
 
 abstract class EmployeeState extends Equatable {
   final Employee? employee;
-  final String? errorMessage;
+  final dynamic exception;
 
-  const EmployeeState({this.employee, this.errorMessage});
+  const EmployeeState({this.employee, this.exception});
 
   @override
-  List<Object> get props => [employee!, errorMessage!];
+  List<Object> get props => [employee!, exception!];
 }
 
 class EmployeeLoading extends EmployeeState {
@@ -20,5 +20,5 @@ class EmployeeDone extends EmployeeState {
 }
 
 class EmployeeError extends EmployeeState {
-  const EmployeeError({String? errorMessage}) : super(errorMessage: errorMessage);
+  const EmployeeError({dynamic exception}) : super(exception: exception);
 }
