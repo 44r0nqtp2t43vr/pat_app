@@ -34,6 +34,11 @@ enum TextMeaning {
   electronicSignature,
   workIDPhoto,
   modification,
+  setup,
+  serverIP,
+  timeoutSetting,
+  storage,
+  manualSyn,
 }
 
 class LanguageController extends GetxController {
@@ -114,6 +119,16 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "WORK ID PHOTO" : "工作證拍照";
       case TextMeaning.modification:
         return getCurrentLanguage() == Language.english ? "MODIFICATION" : "修改";
+      case TextMeaning.setup:
+        return getCurrentLanguage() == Language.english ? "SETUP" : "設定";
+      case TextMeaning.serverIP:
+        return getCurrentLanguage() == Language.english ? "Server IP" : "Server IP";
+      case TextMeaning.timeoutSetting:
+        return getCurrentLanguage() == Language.english ? "Time Out Setting (sec)" : "與伺服器溝通等待時間 (秒)";
+      case TextMeaning.storage:
+        return getCurrentLanguage() == Language.english ? "STORAGE" : "儲存";
+      case TextMeaning.manualSyn:
+        return getCurrentLanguage() == Language.english ? "MANUAL SYN" : "手動同步";
       default:
         return "BUTTON";
     }

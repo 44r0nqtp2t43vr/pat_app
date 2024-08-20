@@ -7,12 +7,24 @@ import 'package:pat_app/features/input_shipment/presentation/screens/data_error/
 import 'package:pat_app/features/input_shipment/presentation/screens/process_entries/process_entries.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/select_entries/select_entries.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/delivery_driver/delivery_driver.dart';
+import 'package:pat_app/features/setup/presentation/screens/input_password/input_password.dart';
+import 'package:pat_app/features/setup/presentation/screens/input_setup/input_setup.dart';
+import 'package:pat_app/features/setup/presentation/screens/password_error/password_error.dart';
 
 class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case '/':
         return _materialRoute(const MainMenu());
+
+      case '/inputPassword':
+        return _materialRoute(const InputPassword());
+
+      case '/inputSetup':
+        return _materialRoute(const InputSetup());
+
+      case '/passwordError':
+        return _materialRoute(const PasswordError());
 
       case '/userLogin':
         return _materialRoute(const UserLogin());
