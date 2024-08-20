@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +8,6 @@ import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_button_freetext.dart';
-import 'package:pat_app/core/widgets/app_error_container.dart';
 import 'package:pat_app/core/widgets/app_search_box.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_state.dart';
@@ -81,6 +83,13 @@ class _SelectEntriesState extends State<SelectEntries> {
               if (state is EmployeeDone) {
                 BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
               }
+              if (state is EmployeeError) {
+                if (state.exception is SocketException || state.exception is TimeoutException) {
+                  Navigator.pushNamed(context, '/networkError', arguments: state);
+                } else {
+                  Navigator.pushNamed(context, '/employeeIDError');
+                }
+              }
             },
             builder: (context, state) {
               if (state is EmployeeDone) {
@@ -92,7 +101,12 @@ class _SelectEntriesState extends State<SelectEntries> {
                     ),
                     const SizedBox(height: 8),
                     Expanded(
-                      child: BlocBuilder<RCsListBloc, RCsListState>(
+                      child: BlocConsumer<RCsListBloc, RCsListState>(
+                        listener: (context, state) {
+                          if (state is RCsListError) {
+                            Navigator.pushNamed(context, '/networkError', arguments: state);
+                          }
+                        },
                         builder: (context, state) {
                           if (state is RCsListDone) {
                             final filteredRCsList = state.rcsList!.where((rc) => rc.rcno.contains(_searchController.text)).toList();
@@ -130,12 +144,12 @@ class _SelectEntriesState extends State<SelectEntries> {
                   ],
                 );
               }
-              if (state is EmployeeError) {
-                return const AppErrorContainer(
-                  errorTextMeaning: TextMeaning.passwordError,
-                  buttonTextMeaning: TextMeaning.password,
-                );
-              }
+              // if (state is EmployeeError) {
+              //   return const AppErrorContainer(
+              //     errorTextMeaning: TextMeaning.dataError,
+              //     buttonTextMeaning: TextMeaning.backForCheck,
+              //   );
+              // }
               return const Center(child: CupertinoActivityIndicator());
             },
           ),

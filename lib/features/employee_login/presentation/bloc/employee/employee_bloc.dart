@@ -15,12 +15,16 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
   void onLoginEmployee(LoginEmployeeEvent event, Emitter<EmployeeState> emit) async {
     emit(const EmployeeLoading());
 
-    final employee = await _loginEmployeeUseCase(params: event.employeeID!);
+    try {
+      final employee = await _loginEmployeeUseCase(params: event.employeeID!);
 
-    if (employee == null) {
-      emit(const EmployeeError());
-    } else {
-      emit(EmployeeDone(employee: employee));
+      if (employee == null) {
+        emit(EmployeeError(exception: Exception()));
+      } else {
+        emit(EmployeeDone(employee: employee));
+      }
+    } catch (e) {
+      emit(EmployeeError(exception: e));
     }
   }
 }
