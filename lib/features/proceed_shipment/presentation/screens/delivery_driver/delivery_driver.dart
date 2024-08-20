@@ -33,16 +33,24 @@ class DeliveryDriver extends StatelessWidget {
               ),
             ),
             AppBigButton(
-              onPressed: () {},
+              onPressed: () => _onESignatureButtonPressed(context),
               textMeaning: TextMeaning.electronicSignature,
             ),
             AppBigButton(
-              onPressed: () {},
+              onPressed: () => _onWorkIdButtonPressed(context),
               textMeaning: TextMeaning.workIDPhoto,
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onESignatureButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/electronicSignature');
+  }
+
+  void _onWorkIdButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/workId');
   }
 }
