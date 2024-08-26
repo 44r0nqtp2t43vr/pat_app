@@ -24,7 +24,6 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   final _customerNameController = TextEditingController();
   final _productPartNumberController = TextEditingController();
   final _totalNumberOfShipmentBoxesController = TextEditingController();
-  final _quantityOfProductsInTheLastShipmentBox = TextEditingController();
 
   void _submitData(BuildContext context) {
     if (isFirstPage) {
@@ -35,7 +34,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
       if (_formKey.currentState!.validate()) {
         if (_isDataValid()) {
           if (sl<SelectedRCsListController>().isEntryIndexLast()) {
-            sl<SelectedRCsListController>().setSelectedRCAtIndex(entry);
+            // sl<SelectedRCsListController>().setSelectedRCAtIndex(entry);
             Navigator.pushNamed(context, '/confirmShipment');
           } else {
             sl<SelectedRCsListController>().incrementEntryIndex();
@@ -49,24 +48,11 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   }
 
   bool _isDataValid() {
-    final numOfProducts = entry.numberOfProducts;
-    final numOfProductsInLastShipmentBox = int.tryParse(_quantityOfProductsInTheLastShipmentBox.text.trim());
     final numOfShipmentBoxes = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
 
-    if (numOfProductsInLastShipmentBox == null || numOfShipmentBoxes == null || numOfShipmentBoxes == 1) {
+    if (numOfShipmentBoxes == null || numOfShipmentBoxes < 1 || numOfShipmentBoxes != entry.numberOfShipmentBoxes) {
       return false;
     }
-
-    final remainder = (numOfProducts - numOfProductsInLastShipmentBox) % (numOfShipmentBoxes - 1);
-
-    if (remainder != 0) {
-      return false;
-    }
-
-    setState(() {
-      entry.numberOfLastShipmentBoxProducts = numOfProductsInLastShipmentBox;
-      entry.numberOfShipmentBoxes = numOfShipmentBoxes;
-    });
 
     return true;
   }
@@ -79,8 +65,6 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     _rcnoController.text = entry.rcno;
     _customerNameController.text = entry.customerName;
     _productPartNumberController.text = entry.productPartNumber;
-    _totalNumberOfShipmentBoxesController.text = entry.numberOfShipmentBoxes == null ? "" : entry.numberOfShipmentBoxes.toString();
-    _quantityOfProductsInTheLastShipmentBox.text = entry.numberOfLastShipmentBoxProducts == null ? "" : entry.numberOfLastShipmentBoxProducts.toString();
 
     super.initState();
   }
@@ -89,7 +73,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) {
           return;
         }
@@ -146,7 +130,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                                   : const SizedBox(),
                               AppTextField(
                                 controller: _rcnoController,
-                                mainLabel: TextMeaning.rcNo,
+                                mainLabel: TextMeaning.shippedItems,
                                 enabled: false,
                               ),
                               const SizedBox(height: 40),
@@ -158,14 +142,14 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                               const SizedBox(height: 40),
                               AppTextField(
                                 controller: _productPartNumberController,
-                                mainLabel: TextMeaning.productPartNumber,
+                                mainLabel: TextMeaning.shipTo,
                                 enabled: false,
                               ),
                             ]
                           : [
                               AppTextField(
                                 controller: _rcnoController,
-                                mainLabel: TextMeaning.rcNo,
+                                mainLabel: TextMeaning.shippedItems,
                                 enabled: false,
                               ),
                               const SizedBox(height: 40),
@@ -173,13 +157,6 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                                 controller: _totalNumberOfShipmentBoxesController,
                                 mainLabel: TextMeaning.totalNumberOfShipmentBoxes,
                                 hintText: TextMeaning.totalNumberOfShipmentBoxesHint,
-                                dataType: DataType.integer,
-                              ),
-                              const SizedBox(height: 40),
-                              AppTextField(
-                                controller: _quantityOfProductsInTheLastShipmentBox,
-                                mainLabel: TextMeaning.quantityOfProductsInTheLastShipmentBox,
-                                hintText: TextMeaning.quantityOfProductsInTheLastShipmentBoxHint,
                                 dataType: DataType.integer,
                               ),
                             ],

@@ -19,7 +19,7 @@ class ConfirmShipment extends StatelessWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) {
           return;
         }
@@ -88,7 +88,7 @@ class ConfirmShipment extends StatelessWidget {
   void _onCancelButtonPressed(BuildContext context) {
     sl<SelectedRCsListController>().setSelectedRCsList([]);
     BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
-    Navigator.pushNamed(context, '/selectEntries');
+    Navigator.pushNamed(context, '/selectVia');
   }
 
   void _onProceedButtonPressed(BuildContext context) {

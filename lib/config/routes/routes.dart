@@ -8,6 +8,7 @@ import 'package:pat_app/features/input_shipment/presentation/screens/confirm_shi
 import 'package:pat_app/features/input_shipment/presentation/screens/data_error/data_error.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/process_entries/process_entries.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/select_entries/select_entries.dart';
+import 'package:pat_app/features/input_shipment/presentation/screens/select_via/select_via.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/confirm_save/confirm_save.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/delivery_driver/delivery_driver.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/electronic_signature/electronic_signature.dart';
@@ -15,7 +16,6 @@ import 'package:pat_app/features/proceed_shipment/presentation/screens/work_id_p
 import 'package:pat_app/features/setup/presentation/screens/input_password/input_password.dart';
 import 'package:pat_app/features/setup/presentation/screens/input_setup/input_setup.dart';
 import 'package:pat_app/features/setup/presentation/screens/password_error/password_error.dart';
-
 
 class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
@@ -40,6 +40,9 @@ class AppRoutes {
 
       case '/userLogin':
         return _materialRoute(const UserLogin());
+
+      case '/selectVia':
+        return _materialRoute(const SelectVia());
 
       case '/selectEntries':
         return _materialRoute(const SelectEntries());

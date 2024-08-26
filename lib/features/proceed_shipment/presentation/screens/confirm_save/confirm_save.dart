@@ -33,6 +33,6 @@ class ConfirmSave extends StatelessWidget {
   void _onExitButtonPressed(BuildContext context) {
     sl<SelectedRCsListController>().setSelectedRCsList([]);
     BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
-    Navigator.pushNamed(context, '/selectEntries');
+    Navigator.pushNamed(context, '/selectVia');
   }
 }

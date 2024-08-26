@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_error_container.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_state.dart';
-import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
-import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_event.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_state.dart';
 
 class NetworkError extends StatelessWidget {
@@ -17,7 +14,7 @@ class NetworkError extends StatelessWidget {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     } else if (state is RCsListError) {
-      BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
     }
   }
@@ -26,7 +23,7 @@ class NetworkError extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) {
           return;
         }
