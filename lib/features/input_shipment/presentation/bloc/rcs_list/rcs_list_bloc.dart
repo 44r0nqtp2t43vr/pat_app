@@ -16,7 +16,7 @@ class RCsListBloc extends Bloc<RCsListEvent, RCsListState> {
     emit(const RCsListLoading());
 
     try {
-      final rcsList = await _getRCsListUseCase();
+      final rcsList = await _getRCsListUseCase(params: event.getRCsListData);
       emit(RCsListDone(rcsList: rcsList));
     } catch (e) {
       emit(RCsListError(exception: e));

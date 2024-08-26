@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_big_button.dart';
-import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_text_field.dart';
 import 'package:pat_app/injection_container.dart';
 
@@ -35,7 +34,7 @@ class CheckShipment extends StatelessWidget {
                     children: [
                       AppTextField(
                         controller: TextEditingController(text: rc.rcno),
-                        mainLabel: TextMeaning.rcNo,
+                        mainLabel: TextMeaning.shippedItems,
                         enabled: false,
                       ),
                       const SizedBox(height: 40),
@@ -47,7 +46,7 @@ class CheckShipment extends StatelessWidget {
                       const SizedBox(height: 40),
                       AppTextField(
                         controller: TextEditingController(text: rc.productPartNumber),
-                        mainLabel: TextMeaning.productPartNumber,
+                        mainLabel: TextMeaning.shipTo,
                         enabled: false,
                       ),
                       const SizedBox(height: 40),
@@ -56,22 +55,16 @@ class CheckShipment extends StatelessWidget {
                         mainLabel: TextMeaning.totalNumberOfShipmentBoxes,
                         enabled: false,
                       ),
-                      const SizedBox(height: 40),
-                      AppTextField(
-                        controller: TextEditingController(text: rc.numberOfLastShipmentBoxProducts.toString()),
-                        mainLabel: TextMeaning.quantityOfProductsInTheLastShipmentBox,
-                        enabled: false,
-                      ),
-                      const SizedBox(height: 40),
+                      index != selectedRCsList.length - 1 ? const Divider(height: 80) : const SizedBox(),
                     ],
                   );
                 },
               ),
             ),
             const SizedBox(height: 20),
-            AppButton(
-              onPressed: () => _onModificationButtonPressed(context),
-              textMeaning: TextMeaning.modification,
+            AppBigButton(
+              onPressed: () => _onCancelButtonPressed(context),
+              textMeaning: TextMeaning.cancelThisShipment,
             ),
             const SizedBox(height: 20),
             AppBigButton(
@@ -84,9 +77,14 @@ class CheckShipment extends StatelessWidget {
     );
   }
 
-  void _onModificationButtonPressed(BuildContext context) {
-    sl<SelectedRCsListController>().setEntryIndex(0);
-    Navigator.pushNamed(context, '/processEntries');
+  // void _onModificationButtonPressed(BuildContext context) {
+  //   sl<SelectedRCsListController>().setEntryIndex(0);
+  //   Navigator.pushNamed(context, '/processEntries');
+  // }
+
+  void _onCancelButtonPressed(BuildContext context) {
+    sl<SelectedRCsListController>().setSelectedRCsList([]);
+    Navigator.pushNamed(context, '/selectVia');
   }
 
   void _onProceedButtonPressed(BuildContext context) {

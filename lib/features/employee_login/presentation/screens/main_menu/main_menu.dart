@@ -14,7 +14,7 @@ class MainMenu extends StatelessWidget {
 
     return PopScope(
       canPop: isEntryIndexNull ? false : true,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) {
           return;
         }

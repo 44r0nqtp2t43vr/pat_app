@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:pat_app/core/interface/database_repository.dart';
-import 'package:pat_app/core/resources/formatters.dart';
 import 'package:pat_app/features/employee_login/domain/models/employee.dart';
+import 'package:pat_app/features/input_shipment/domain/models/get_rcs_list_data.dart';
 import 'package:pat_app/features/input_shipment/domain/models/rc.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {
@@ -27,7 +27,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<RC>> getRCsList() async {
+  Future<List<RC>> getRCsList(GetRCsListData data) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
 
@@ -37,43 +37,43 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
           date: "2024-01-30",
           customerName: "JUMJUM",
           productPartNumber: "123456",
-          numberOfProducts: 100,
+          numberOfShipmentBoxes: 10,
         ),
         RC(
           rcno: "P0000000002",
           date: "2024-01-29",
           customerName: "JUMJUM",
           productPartNumber: "123456",
-          numberOfProducts: 100,
+          numberOfShipmentBoxes: 10,
         ),
         RC(
           rcno: "P0000000003",
           date: "2024-01-28",
           customerName: "JUMJUM",
           productPartNumber: "123456",
-          numberOfProducts: 100,
+          numberOfShipmentBoxes: 10,
         ),
         RC(
           rcno: "P0000000004",
           date: "2024-01-27",
           customerName: "JUMJUM",
           productPartNumber: "123456",
-          numberOfProducts: 100,
+          numberOfShipmentBoxes: 10,
         ),
         RC(
           rcno: "P0000000005",
           date: "2024-01-26",
           customerName: "JUMJUM",
           productPartNumber: "123456",
-          numberOfProducts: 100,
+          numberOfShipmentBoxes: 10,
         ),
       ];
 
-      sampleData.sort((a, b) {
-        return stringToDateTime(a.date).compareTo(stringToDateTime(b.date));
-      });
-
-      return Future.value(sampleData);
+      if (data.isTextInput) {
+        return Future.value(sampleData);
+      } else {
+        return Future.value(sampleData);
+      }
     } on SocketException catch (_) {
       throw const SocketException("");
     } on TimeoutException catch (_) {

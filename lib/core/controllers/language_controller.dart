@@ -44,6 +44,10 @@ enum TextMeaning {
   manualSyn,
   networkConnectionError,
   employeeIDError,
+  viaShippingNo,
+  viaCustomer,
+  shippedItems,
+  shipTo,
 }
 
 class LanguageController extends GetxController {
@@ -69,9 +73,7 @@ class LanguageController extends GetxController {
   String translate(TextMeaning textMeaning) {
     switch (textMeaning) {
       case TextMeaning.userLogin:
-        return getCurrentLanguage() == Language.english
-            ? "USER LOGIN"
-            : "使用者登入";
+        return getCurrentLanguage() == Language.english ? "USER LOGIN" : "使用者登入";
       case TextMeaning.exit:
         return getCurrentLanguage() == Language.english ? "EXIT" : "離開";
       case TextMeaning.employeeID:
@@ -81,85 +83,49 @@ class LanguageController extends GetxController {
       case TextMeaning.password:
         return getCurrentLanguage() == Language.english ? "PASSWORD" : "密碼";
       case TextMeaning.passwordError:
-        return getCurrentLanguage() == Language.english
-            ? "PASSWORD ERROR!!\n\nPlease contact to technical support!"
-            : "密碼錯誤!!\n\n請洽技術人員!!";
+        return getCurrentLanguage() == Language.english ? "PASSWORD ERROR!!\n\nPlease contact to technical support!" : "密碼錯誤!!\n\n請洽技術人員!!";
       case TextMeaning.rcNo:
         return getCurrentLanguage() == Language.english ? "RC No." : "RC No.";
       case TextMeaning.confirm:
         return getCurrentLanguage() == Language.english ? "CONFIRM" : "確認";
       case TextMeaning.numberOfEntriesSelectedInBatch:
-        return getCurrentLanguage() == Language.english
-            ? "Number of entries selected in batch"
-            : "批次選取的資料筆數";
+        return getCurrentLanguage() == Language.english ? "Number of entries selected in batch" : "批次選取的資料筆數";
       case TextMeaning.processingEntryNumber:
-        return getCurrentLanguage() == Language.english
-            ? "Processing entry number"
-            : "目前正在執行筆數為";
+        return getCurrentLanguage() == Language.english ? "Processing entry number" : "目前正在執行筆數為";
       case TextMeaning.customerName:
-        return getCurrentLanguage() == Language.english
-            ? "Customer Name"
-            : "客戶名稱";
+        return getCurrentLanguage() == Language.english ? "Customer Name" : "客戶名稱";
       case TextMeaning.productPartNumber:
-        return getCurrentLanguage() == Language.english
-            ? "Product Part Number"
-            : "產品料號";
+        return getCurrentLanguage() == Language.english ? "Product Part Number" : "產品料號";
       case TextMeaning.next:
         return getCurrentLanguage() == Language.english ? "NEXT" : "下一頁";
       case TextMeaning.totalNumberOfShipmentBoxes:
-        return getCurrentLanguage() == Language.english
-            ? "Total Number of Shipment Boxes"
-            : "出貨總箱數";
+        return getCurrentLanguage() == Language.english ? "Total Number of Shipment Boxes" : "出貨總箱數";
       case TextMeaning.quantityOfProductsInTheLastShipmentBox:
-        return getCurrentLanguage() == Language.english
-            ? "Quantity of Products in the Last Shipment Box"
-            : "尾數箱產品數量";
+        return getCurrentLanguage() == Language.english ? "Quantity of Products in the Last Shipment Box" : "尾數箱產品數量";
       case TextMeaning.totalNumberOfShipmentBoxesHint:
-        return getCurrentLanguage() == Language.english
-            ? "Please enter the total number of shipment boxes"
-            : "請輸入此出貨總箱數";
+        return getCurrentLanguage() == Language.english ? "Please enter the total number of shipment boxes" : "請輸入此出貨總箱數";
       case TextMeaning.quantityOfProductsInTheLastShipmentBoxHint:
-        return getCurrentLanguage() == Language.english
-            ? "Please enter the quantity of products in the last shipment box"
-            : "請輸入尾數箱產品數量";
+        return getCurrentLanguage() == Language.english ? "Please enter the quantity of products in the last shipment box" : "請輸入尾數箱產品數量";
       case TextMeaning.dataError:
-        return getCurrentLanguage() == Language.english
-            ? "There is an ERROR in the data!\n\nPlease Re-Check!!"
-            : "資料有錯誤!\n\n請重新檢查!";
+        return getCurrentLanguage() == Language.english ? "There is an ERROR in the data!\n\nPlease Re-Check!!" : "資料有錯誤!\n\n請重新檢查!";
       case TextMeaning.backForCheck:
-        return getCurrentLanguage() == Language.english
-            ? "BACK FOR CHECK"
-            : "返回";
+        return getCurrentLanguage() == Language.english ? "BACK FOR CHECK" : "返回";
       case TextMeaning.name:
         return getCurrentLanguage() == Language.english ? "Name" : "姓名";
       case TextMeaning.toCheckShipmentDetails:
-        return getCurrentLanguage() == Language.english
-            ? "TO CHECK SHIPMENT DETAILS"
-            : "出貨明細檢查";
+        return getCurrentLanguage() == Language.english ? "TO CHECK SHIPMENT DETAILS" : "出貨明細檢查";
       case TextMeaning.cancelThisShipment:
-        return getCurrentLanguage() == Language.english
-            ? "CANCEL THIS SHIPMENT"
-            : "放棄本次操作";
+        return getCurrentLanguage() == Language.english ? "CANCEL THIS SHIPMENT" : "放棄本次操作";
       case TextMeaning.proceedWithShipment:
-        return getCurrentLanguage() == Language.english
-            ? "PROCEED WITH SHIPMENT"
-            : "執行出貨";
+        return getCurrentLanguage() == Language.english ? "PROCEED WITH SHIPMENT" : "執行出貨";
       case TextMeaning.chooseOneFromTheOptionsBelow:
-        return getCurrentLanguage() == Language.english
-            ? "Choose one from the options below"
-            : "下列兩種方式擇一即可";
+        return getCurrentLanguage() == Language.english ? "Choose one from the options below" : "下列兩種方式擇一即可";
       case TextMeaning.deliveryDriver:
-        return getCurrentLanguage() == Language.english
-            ? "Delivery Driver"
-            : "收貨司機";
+        return getCurrentLanguage() == Language.english ? "Delivery Driver" : "收貨司機";
       case TextMeaning.electronicSignature:
-        return getCurrentLanguage() == Language.english
-            ? "ELECTRONIC SIGNATURE"
-            : "電子簽名";
+        return getCurrentLanguage() == Language.english ? "ELECTRONIC SIGNATURE" : "電子簽名";
       case TextMeaning.workIDPhoto:
-        return getCurrentLanguage() == Language.english
-            ? "WORK ID PHOTO"
-            : "工作證拍照";
+        return getCurrentLanguage() == Language.english ? "WORK ID PHOTO" : "工作證拍照";
       case TextMeaning.modification:
         return getCurrentLanguage() == Language.english ? "MODIFICATION" : "修改";
       case TextMeaning.clear:
@@ -182,6 +148,14 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!" : "Network Connection ERROR!!\n\nUnable to connect to the server, please try again later or contact technical support!";
       case TextMeaning.employeeIDError:
         return getCurrentLanguage() == Language.english ? "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!" : "Employee ID Error!!!\n\nEmployee ID Not Found, Please Re-Enter!";
+      case TextMeaning.viaShippingNo:
+        return getCurrentLanguage() == Language.english ? "Via Shipping No" : "透過出貨單";
+      case TextMeaning.viaCustomer:
+        return getCurrentLanguage() == Language.english ? "Via Customer" : "透過客戶";
+      case TextMeaning.shippedItems:
+        return getCurrentLanguage() == Language.english ? "Shipped items" : "出貨項目";
+      case TextMeaning.shipTo:
+        return getCurrentLanguage() == Language.english ? "Ship To" : "Ship To";
       default:
         return "BUTTON";
     }

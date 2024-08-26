@@ -23,7 +23,7 @@ class _UserLoginState extends State<UserLogin> {
     if (_formKey.currentState!.validate()) {
       sl<SelectedRCsListController>().setSelectedRCsList([]);
       BlocProvider.of<EmployeeBloc>(context).add(LoginEmployeeEvent(_employeeIDController.text));
-      Navigator.pushNamed(context, '/selectEntries');
+      Navigator.pushNamed(context, '/selectVia');
     }
   }
 
@@ -33,7 +33,7 @@ class _UserLoginState extends State<UserLogin> {
 
     return PopScope(
       canPop: isEntryIndexNull ? false : true,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) {
           return;
         }
