@@ -1,15 +1,25 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pat_app/core/controllers/files_controller.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_title_text.dart';
+import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
+import 'package:pat_app/injection_container.dart';
 
 class WorkIdPhotoPreview extends StatelessWidget {
-  final String imagePath;
+  final XFile image;
 
-  const WorkIdPhotoPreview({Key? key, required this.imagePath})
-      : super(key: key);
+  const WorkIdPhotoPreview({Key? key, required this.image}) : super(key: key);
+
+  void _onConfirm(BuildContext context) {
+    final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
+    sl<FilesController>().saveImageToDirectory(image, employee.id);
+    Navigator.pushNamed(context, '/confirmSave');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +42,7 @@ class WorkIdPhotoPreview extends StatelessWidget {
               ),
               Expanded(
                 child: Image.file(
-                  File(imagePath),
+                  File(image.path),
                 ),
               ),
               const SizedBox(
@@ -46,7 +56,7 @@ class WorkIdPhotoPreview extends StatelessWidget {
                 height: 10,
               ),
               AppButton(
-                onPressed: () => _onConfirmButtonPressed(context),
+                onPressed: () => _onConfirm(context),
                 textMeaning: TextMeaning.confirm,
               ),
             ],
@@ -58,9 +68,5 @@ class WorkIdPhotoPreview extends StatelessWidget {
 
   void _onWorkIdButtonPressed(BuildContext context) {
     Navigator.pushNamed(context, '/workId');
-  }
-
-  void _onConfirmButtonPressed(BuildContext context) {
-    Navigator.pushNamed(context, '/confirmSave');
   }
 }

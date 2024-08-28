@@ -154,6 +154,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                                 controller: _shippedItemController,
                                 mainLabel: TextMeaning.shippedItems,
                                 enabled: false,
+                                maxLines: null,
                               ),
                               const SizedBox(height: 40),
                               AppTextField(

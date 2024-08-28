@@ -9,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 const header = [];
 
 class FilesController extends GetxController {
+  Rx<File>? selectedCoverImage = Rx<File>(File(""));
+
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
       return true;
@@ -20,7 +22,7 @@ class FilesController extends GetxController {
 
   Future<String?> getExternalSdCardPath() async {
     if (await _requestPermission(Permission.storage)) {
-      List<Directory>? extDirectories = await getExternalStorageDirectories(type: StorageDirectory.documents);
+      List<Directory>? extDirectories = await getExternalStorageDirectories();
       if (extDirectories == null) {
         return null;
       } else if (extDirectories.length == 1) {
@@ -29,6 +31,25 @@ class FilesController extends GetxController {
       return extDirectories[1].path;
     }
     return null;
+  }
+
+  Future<void> saveImageToDirectory(dynamic image, String employeeID) async {
+    final directoryPath = await getExternalSdCardPath();
+
+    if (directoryPath == null) {
+      return;
+    }
+
+    final folderName = '${dateTimeToFolderName(DateTime.now())}_$employeeID';
+    final dir = Directory('$directoryPath/$folderName');
+    final File file = File('$directoryPath/$folderName/signature.png');
+
+    if (await dir.exists()) {
+      await file.writeAsBytes(image);
+    } else {
+      dir.create();
+      await file.writeAsBytes(image);
+    }
   }
 
   Future<void> writeCsvToDirectory(dynamic data, {String? oldRcno}) async {

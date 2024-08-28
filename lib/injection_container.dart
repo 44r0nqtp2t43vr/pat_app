@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pat_app/core/controllers/files_controller.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/controllers/setup_controller.dart';
@@ -28,6 +29,10 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<SetupController>(SetupController());
 
   Get.put<SetupController>(sl());
+
+  sl.registerSingleton<FilesController>(FilesController());
+
+  Get.put<FilesController>(sl());
 
   // UseCases
 

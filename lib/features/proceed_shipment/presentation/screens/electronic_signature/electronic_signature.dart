@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pat_app/core/controllers/files_controller.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_title_text.dart';
+import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
+import 'package:pat_app/injection_container.dart';
 import 'package:signature/signature.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +22,43 @@ class _ElectronicSignatureState extends State<ElectronicSignature> {
     penStrokeWidth: 3.0,
     exportBackgroundColor: Colors.white,
   );
+
+  void _clearSignature() {
+    _signatureController.clear();
+  }
+
+  // Future<void> _saveSignature() async {
+  //   if (_signatureController.isNotEmpty) {
+  //     final Uint8List? image = await _signatureController.toPngBytes();
+
+  //     if (image != null) {
+  //       final status = await Permission.storage.request();
+  //       if (status.isGranted) {
+  //         final directory = await getApplicationDocumentsDirectory();
+  //         final String path = '${directory.path}/signature.png';
+  //         final File file = File(path);
+  //         await file.writeAsBytes(image);
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text('Signature saved at $path')),
+  //         );
+  //       } else {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(content: Text('Permission denied')),
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
+
+  void _onConfirm(BuildContext context, String employeeID) async {
+    if (_signatureController.isNotEmpty) {
+      final image = await _signatureController.toPngBytes();
+      if (image != null) {
+        sl<FilesController>().saveImageToDirectory(image, employeeID);
+        Navigator.pushNamed(context, '/confirmSave');
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -42,6 +83,8 @@ class _ElectronicSignatureState extends State<ElectronicSignature> {
 
   @override
   Widget build(BuildContext context) {
+    final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(
@@ -81,7 +124,7 @@ class _ElectronicSignatureState extends State<ElectronicSignature> {
                 ),
                 Expanded(
                   child: AppButton(
-                    onPressed: () => _onConfirmButtonPressed(context),
+                    onPressed: () => _onConfirm(context, employee.id),
                     textMeaning: TextMeaning.confirm,
                   ),
                 ),
@@ -91,36 +134,5 @@ class _ElectronicSignatureState extends State<ElectronicSignature> {
         ),
       ),
     );
-  }
-
-  // Future<void> _saveSignature() async {
-  //   if (_signatureController.isNotEmpty) {
-  //     final Uint8List? image = await _signatureController.toPngBytes();
-
-  //     if (image != null) {
-  //       final status = await Permission.storage.request();
-  //       if (status.isGranted) {
-  //         final directory = await getApplicationDocumentsDirectory();
-  //         final String path = '${directory.path}/signature.png';
-  //         final File file = File(path);
-  //         await file.writeAsBytes(image);
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text('Signature saved at $path')),
-  //         );
-  //       } else {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(content: Text('Permission denied')),
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
-
-  void _clearSignature() {
-    _signatureController.clear();
-  }
-
-  void _onConfirmButtonPressed(BuildContext context) {
-    Navigator.pushNamed(context, '/confirmSave');
   }
 }

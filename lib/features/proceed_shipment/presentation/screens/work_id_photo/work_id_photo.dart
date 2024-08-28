@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_title_text.dart';
-import 'package:pat_app/features/proceed_shipment/presentation/screens/work_id_photo/work_id_photo_preview.dart';
 
 class WorkIdPhoto extends StatefulWidget {
   const WorkIdPhoto({super.key});
@@ -110,14 +109,9 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
 
       final image = await _cameraController.takePicture();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WorkIdPhotoPreview(imagePath: image.path),
-        ),
-      );
+      Navigator.pushNamed(context, '/workIdPreview', arguments: image);
     } catch (e) {
-      print('Error taking picture: $e');
+      // print('Error taking picture: $e');
     }
   }
 }
