@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +25,7 @@ class _SelectEntriesState extends State<SelectEntries> {
   late List<RC> _selectedRCsList;
 
   void _selectOrDeselectRC(RC rc) {
-    final index = _selectedRCsList.indexWhere((selectedRC) => selectedRC.rcno == rc.rcno);
+    final index = _selectedRCsList.indexWhere((selectedRC) => selectedRC == rc);
     if (index >= 0) {
       setState(() {
         _selectedRCsList.removeAt(index);
@@ -50,66 +53,85 @@ class _SelectEntriesState extends State<SelectEntries> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 20.0,
-          bottom: 40.0,
-        ),
-        child: BlocConsumer<RCsListBloc, RCsListState>(
-          listener: (context, state) {
-            if (state is RCsListError) {
-              Navigator.pushNamed(context, '/networkError', arguments: state);
-            }
-          },
-          builder: (context, state) {
-            if (state is RCsListDone) {
-              // final filteredRCsList = state.rcsList!.where((rc) => rc.rcno.contains(_searchController.text)).toList();
-              final filteredRCsList = state.rcsList!;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) {
+          return;
+        }
 
-              return Column(
-                children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: AppTitleText(
-                      title: TextMeaning.shippedItems,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: filteredRCsList.length,
-                      itemBuilder: (context, index) {
-                        final rc = filteredRCsList[index];
+        sl<SelectedRCsListController>().setSelectedRCsList([]);
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+            bottom: 40.0,
+          ),
+          child: BlocConsumer<RCsListBloc, RCsListState>(
+            listener: (context, state) {
+              if (state is RCsListError) {
+                if (state.exception is SocketException || state.exception is TimeoutException) {
+                  Navigator.pushNamed(context, '/networkError', arguments: state);
+                }
+              }
+            },
+            builder: (context, state) {
+              if (state is RCsListDone) {
+                // final filteredRCsList = state.rcsList!.where((rc) => rc.rcno.contains(_searchController.text)).toList();
+                final filteredRCsList = state.rcsList!;
 
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: AppButtonFreetext(
-                            onPressed: () => _selectOrDeselectRC(rc),
-                            text: rc.rcno,
-                            backgroundColor: _selectedRCsList.indexWhere((selectedRC) => selectedRC.rcno == rc.rcno) >= 0 ? Colors.blue[200] : null,
-                          ),
-                        );
-                      },
+                return Column(
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: AppTitleText(
+                        title: TextMeaning.shippedItems,
+                      ),
                     ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: filteredRCsList.length,
+                        itemBuilder: (context, index) {
+                          final rc = filteredRCsList[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: AppButtonFreetext(
+                              onPressed: () => _selectOrDeselectRC(rc),
+                              text: rc.shippedItem,
+                              backgroundColor: _selectedRCsList.indexWhere((selectedRC) => selectedRC == rc) >= 0 ? Colors.blue[200] : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    AppButton(
+                      onPressed: () => _confirmSelected(context),
+                      textMeaning: TextMeaning.confirm,
+                    ),
+                  ],
+                );
+              }
+              if (state is RCsListError) {
+                return Center(
+                  child: Text(
+                    state.exception.message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 40),
                   ),
-                  const SizedBox(height: 20),
-                  AppButton(
-                    onPressed: () => _confirmSelected(context),
-                    textMeaning: TextMeaning.confirm,
-                  ),
-                ],
-              );
-            }
-            if (state is RCsListError) {
+                );
+              }
               return const Center(child: CupertinoActivityIndicator());
-            }
-            return const Center(child: CupertinoActivityIndicator());
-          },
+            },
+          ),
         ),
       ),
     );

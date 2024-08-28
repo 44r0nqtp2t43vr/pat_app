@@ -70,9 +70,9 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       } else {
         final responseData = json.decode(response.body);
         if (responseData['status'] != "OK") {
-          throw Exception();
+          throw Exception(responseData['tip_messages']);
         } else {
-          throw Exception();
+          return List<RC>.from(responseData['data'].map((item) => RC.fromJson(item)));
         }
       }
     } on SocketException catch (_) {
@@ -80,7 +80,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     } on TimeoutException catch (_) {
       throw TimeoutException("");
     } catch (e) {
-      return Future.value([]);
+      rethrow;
     }
   }
 }

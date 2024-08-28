@@ -33,25 +33,28 @@ class CheckShipment extends StatelessWidget {
                   return Column(
                     children: [
                       AppTextField(
-                        controller: TextEditingController(text: rc.rcno),
+                        controller: TextEditingController(text: rc.shippedItem),
                         mainLabel: TextMeaning.shippedItems,
                         enabled: false,
+                        maxLines: null,
                       ),
                       const SizedBox(height: 40),
                       AppTextField(
                         controller: TextEditingController(text: rc.customerName),
                         mainLabel: TextMeaning.customerName,
                         enabled: false,
+                        maxLines: null,
                       ),
                       const SizedBox(height: 40),
                       AppTextField(
-                        controller: TextEditingController(text: rc.productPartNumber),
+                        controller: TextEditingController(text: rc.shipTo),
                         mainLabel: TextMeaning.shipTo,
                         enabled: false,
+                        maxLines: null,
                       ),
                       const SizedBox(height: 40),
                       AppTextField(
-                        controller: TextEditingController(text: rc.numberOfShipmentBoxes.toString()),
+                        controller: TextEditingController(text: rc.totalNumberOfShipmentBoxes.toString()),
                         mainLabel: TextMeaning.totalNumberOfShipmentBoxes,
                         enabled: false,
                       ),

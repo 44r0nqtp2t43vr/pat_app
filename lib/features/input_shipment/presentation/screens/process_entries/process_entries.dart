@@ -20,9 +20,9 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   bool isFirstPage = true;
 
   final _formKey = GlobalKey<FormState>();
-  final _rcnoController = TextEditingController();
+  final _shippedItemController = TextEditingController();
   final _customerNameController = TextEditingController();
-  final _productPartNumberController = TextEditingController();
+  final _shipToController = TextEditingController();
   final _totalNumberOfShipmentBoxesController = TextEditingController();
 
   void _submitData(BuildContext context) {
@@ -50,7 +50,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
   bool _isDataValid() {
     final numOfShipmentBoxes = int.tryParse(_totalNumberOfShipmentBoxesController.text.trim());
 
-    if (numOfShipmentBoxes == null || numOfShipmentBoxes < 1 || numOfShipmentBoxes != entry.numberOfShipmentBoxes) {
+    if (numOfShipmentBoxes == null || numOfShipmentBoxes < 1 || numOfShipmentBoxes != entry.totalNumberOfShipmentBoxes) {
       return false;
     }
 
@@ -62,9 +62,9 @@ class _ProcessEntriesState extends State<ProcessEntries> {
     entry = sl<SelectedRCsListController>().getSelectedRCAtIndex()!;
     count = sl<SelectedRCsListController>().getSelectedRCsCount();
 
-    _rcnoController.text = entry.rcno;
+    _shippedItemController.text = entry.shippedItem;
     _customerNameController.text = entry.customerName;
-    _productPartNumberController.text = entry.productPartNumber;
+    _shipToController.text = entry.shipTo;
 
     super.initState();
   }
@@ -129,26 +129,29 @@ class _ProcessEntriesState extends State<ProcessEntries> {
                                     )
                                   : const SizedBox(),
                               AppTextField(
-                                controller: _rcnoController,
+                                controller: _shippedItemController,
                                 mainLabel: TextMeaning.shippedItems,
                                 enabled: false,
+                                maxLines: null,
                               ),
                               const SizedBox(height: 40),
                               AppTextField(
                                 controller: _customerNameController,
                                 mainLabel: TextMeaning.customerName,
                                 enabled: false,
+                                maxLines: null,
                               ),
                               const SizedBox(height: 40),
                               AppTextField(
-                                controller: _productPartNumberController,
+                                controller: _shipToController,
                                 mainLabel: TextMeaning.shipTo,
                                 enabled: false,
+                                maxLines: null,
                               ),
                             ]
                           : [
                               AppTextField(
-                                controller: _rcnoController,
+                                controller: _shippedItemController,
                                 mainLabel: TextMeaning.shippedItems,
                                 enabled: false,
                               ),
