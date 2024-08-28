@@ -18,11 +18,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     try {
       final employee = await _loginEmployeeUseCase(params: event.employeeID!);
 
-      if (employee == null) {
-        emit(EmployeeError(exception: Exception()));
-      } else {
-        emit(EmployeeDone(employee: employee));
-      }
+      emit(EmployeeDone(employee: employee));
     } catch (e) {
       emit(EmployeeError(exception: e));
     }

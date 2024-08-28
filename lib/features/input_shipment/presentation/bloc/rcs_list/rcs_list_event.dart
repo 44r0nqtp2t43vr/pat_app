@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:pat_app/features/input_shipment/domain/models/get_rcs_list_data.dart';
 
 abstract class RCsListEvent extends Equatable {
-  final GetRCsListData? getRCsListData;
+  final String? getRCsListData;
 
   const RCsListEvent({this.getRCsListData});
 
@@ -11,5 +10,5 @@ abstract class RCsListEvent extends Equatable {
 }
 
 class GetRCsListEvent extends RCsListEvent {
-  const GetRCsListEvent({GetRCsListData? getRCsListData}) : super(getRCsListData: getRCsListData);
+  const GetRCsListEvent({String? getRCsListData}) : super(getRCsListData: getRCsListData);
 }
