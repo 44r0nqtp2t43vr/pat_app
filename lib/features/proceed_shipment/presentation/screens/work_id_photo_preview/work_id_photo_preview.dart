@@ -15,10 +15,25 @@ class WorkIdPhotoPreview extends StatelessWidget {
 
   const WorkIdPhotoPreview({Key? key, required this.image}) : super(key: key);
 
-  void _onConfirm(BuildContext context) {
+  // void _onConfirm(BuildContext context) {
+  //   final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
+  //   sl<FilesController>().saveImageToDirectory(image, employee.id);
+  //   Navigator.pushNamed(context, '/confirmSave');
+  // }
+
+  void _onConfirm(BuildContext context) async {
     final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
-    sl<FilesController>().saveImageToDirectory(image, employee.id);
-    Navigator.pushNamed(context, '/confirmSave');
+    if (await File(image.path).exists()) {
+      final imageBytes = await File(image.path).readAsBytes();
+      if (imageBytes.isNotEmpty) {
+        sl<FilesController>().saveImageToDirectory(imageBytes, employee.id);
+        Navigator.pushNamed(context, '/confirmSave');
+      } else {
+        print('Error: Image file is empty');
+      }
+    } else {
+      print('Error: Image file does not exist');
+    }
   }
 
   @override

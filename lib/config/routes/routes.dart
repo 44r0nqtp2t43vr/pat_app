@@ -35,7 +35,8 @@ class AppRoutes {
         return _materialRoute(const PasswordError());
 
       case '/networkError':
-        return _materialRoute(NetworkError(state: settings.arguments as dynamic));
+        return _materialRoute(
+            NetworkError(state: settings.arguments as dynamic));
 
       case '/employeeIDError':
         return _materialRoute(const EmployeeIDError());
@@ -70,8 +71,9 @@ class AppRoutes {
       case '/workId':
         return _materialRoute(const WorkIdPhoto());
 
-      case '/wordIdPreview':
-        return _materialRoute(WorkIdPhotoPreview(image: settings.arguments as XFile));
+      case '/workIdPreview':
+        return _materialRoute(
+            WorkIdPhotoPreview(image: settings.arguments as XFile));
 
       case '/confirmSave':
         return _materialRoute(const ConfirmSave());

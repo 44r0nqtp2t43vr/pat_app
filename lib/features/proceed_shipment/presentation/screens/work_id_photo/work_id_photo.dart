@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
@@ -22,20 +24,24 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
   }
 
   Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
+    try {
+      final cameras = await availableCameras();
 
-    final frontCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
+      final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
 
-    _cameraController = CameraController(
-      frontCamera,
-      ResolutionPreset.high,
-    );
+      _cameraController = CameraController(
+        frontCamera,
+        ResolutionPreset.high,
+      );
 
-    await _cameraController.initialize();
-    return;
+      await _cameraController.initialize();
+    } catch (e) {
+      print('Error initializing camera: $e');
+      rethrow;
+    }
   }
 
   @override
@@ -57,8 +63,15 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
 
             return Stack(
               children: [
-                SizedBox.expand(
-                  child: CameraPreview(_cameraController),
+                Center(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _cameraController.value.previewSize!.height,
+                      height: _cameraController.value.previewSize!.width,
+                      child: CameraPreview(_cameraController),
+                    ),
+                  ),
                 ),
                 Positioned(
                   top: 0,
@@ -109,9 +122,11 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
 
       final image = await _cameraController.takePicture();
 
+      if (!mounted) return;
+
       Navigator.pushNamed(context, '/workIdPreview', arguments: image);
     } catch (e) {
-      // print('Error taking picture: $e');
+      print('Error taking picture: $e');
     }
   }
 }
