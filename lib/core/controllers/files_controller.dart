@@ -9,7 +9,12 @@ import 'package:permission_handler/permission_handler.dart';
 const header = [];
 
 class FilesController extends GetxController {
-  Rx<File>? selectedCoverImage = Rx<File>(File(""));
+  Rx<File>? electronicSignature = Rx<File>(File(''));
+  Rx<File>? workIdPhoto = Rx<File>(File(''));
+
+  bool get isElectronicSignatureSubmitted =>
+      electronicSignature?.value.existsSync() ?? false;
+  bool get isWorkIdPhotoSubmitted => workIdPhoto?.value.existsSync() ?? false;
 
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
@@ -33,7 +38,8 @@ class FilesController extends GetxController {
     return null;
   }
 
-  Future<void> saveImageToDirectory(dynamic image, String employeeID) async {
+  Future<void> saveImageToDirectory(
+      dynamic image, String employeeID, bool isPic) async {
     final directoryPath = await getExternalSdCardPath();
 
     if (directoryPath == null) {
@@ -42,13 +48,20 @@ class FilesController extends GetxController {
 
     final folderName = '${dateTimeToFolderName(DateTime.now())}_$employeeID';
     final dir = Directory('$directoryPath/$folderName');
-    final File file = File('$directoryPath/$folderName/signature.png');
+    final fileName = isPic ? 'workIdPic.jpg' : 'signature.png';
+    final File file = File('$directoryPath/$folderName/$fileName');
 
     if (await dir.exists()) {
       await file.writeAsBytes(image);
     } else {
       dir.create();
       await file.writeAsBytes(image);
+    }
+
+    if (isPic) {
+      workIdPhoto?.value = file;
+    } else {
+      electronicSignature?.value = file;
     }
   }
 
@@ -69,30 +82,39 @@ class FilesController extends GetxController {
         if (stringToFilename(oldDate!) == stringToFilename(data.date!)) {
           // if same month as old row, simply edit the row
           final csvData = await file.readAsString();
-          List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
-          final indexToEdit = rows.indexWhere((row) => row[0].toString() == oldRcno, 1);
+          List<List<dynamic>> rows =
+              const CsvToListConverter().convert(csvData);
+          final indexToEdit =
+              rows.indexWhere((row) => row[0].toString() == oldRcno, 1);
           rows[indexToEdit] = data.toList();
-          String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
+          String csvDataUpdated =
+              const ListToCsvConverter().convert(rows, convertNullTo: '');
           await file.writeAsString(csvDataUpdated);
         } else {
           // if different month as old row, delete the row from the old csv
-          final oldFile = File('$directoryPath/${stringToFilename(oldDate)}.csv');
+          final oldFile =
+              File('$directoryPath/${stringToFilename(oldDate)}.csv');
           final oldCsvData = await oldFile.readAsString();
-          List<List<dynamic>> oldRows = const CsvToListConverter().convert(oldCsvData);
-          final indexToRemove = oldRows.indexWhere((row) => row[0].toString() == oldRcno, 1);
+          List<List<dynamic>> oldRows =
+              const CsvToListConverter().convert(oldCsvData);
+          final indexToRemove =
+              oldRows.indexWhere((row) => row[0].toString() == oldRcno, 1);
           oldRows.removeAt(indexToRemove);
-          String csvDataUpdated = const ListToCsvConverter().convert(oldRows, convertNullTo: '');
+          String csvDataUpdated =
+              const ListToCsvConverter().convert(oldRows, convertNullTo: '');
           await oldFile.writeAsString(csvDataUpdated);
 
           if (await file.exists()) {
             // append new data to csv
             List<List<dynamic>> csvRow = [data.toList()];
-            String csvData = const ListToCsvConverter().convert(csvRow, convertNullTo: '');
+            String csvData =
+                const ListToCsvConverter().convert(csvRow, convertNullTo: '');
             await file.writeAsString('\r\n$csvData', mode: FileMode.append);
           } else {
             // create a new csv file and insert the header with the data
             List<List<dynamic>> csvTable = [header, data.toList()];
-            String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
+            String csvData =
+                const ListToCsvConverter().convert(csvTable, convertNullTo: '');
             await file.writeAsString(csvData);
           }
         }
@@ -100,12 +122,14 @@ class FilesController extends GetxController {
         if (await file.exists()) {
           // append new data to csv
           List<List<dynamic>> csvRow = [data.toList()];
-          String csvData = const ListToCsvConverter().convert(csvRow, convertNullTo: '');
+          String csvData =
+              const ListToCsvConverter().convert(csvRow, convertNullTo: '');
           await file.writeAsString('\r\n$csvData', mode: FileMode.append);
         } else {
           // create a new csv file and insert the header with the data
           List<List<dynamic>> csvTable = [header, data.toList()];
-          String csvData = const ListToCsvConverter().convert(csvTable, convertNullTo: '');
+          String csvData =
+              const ListToCsvConverter().convert(csvTable, convertNullTo: '');
           await file.writeAsString(csvData);
         }
       }
@@ -125,14 +149,18 @@ class FilesController extends GetxController {
       return [];
     }
 
-    final csvFiles = directory.listSync().where((file) => file.path.endsWith('.csv')).toList();
+    final csvFiles = directory
+        .listSync()
+        .where((file) => file.path.endsWith('.csv'))
+        .toList();
 
     List<List<dynamic>> allRows = [];
     for (var fileEntity in csvFiles) {
       if (fileEntity is File) {
         try {
           final csvData = await fileEntity.readAsString();
-          List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
+          List<List<dynamic>> rows =
+              const CsvToListConverter().convert(csvData);
           rows.removeAt(0);
           allRows.addAll(rows);
         } catch (e) {
@@ -166,10 +194,12 @@ class FilesController extends GetxController {
     final csvData = await file.readAsString();
     List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
 
-    final indexToDelete = rows.indexWhere((row) => row[0].toString() == data.rcno.toString(), 1);
+    final indexToDelete =
+        rows.indexWhere((row) => row[0].toString() == data.rcno.toString(), 1);
     rows.removeAt(indexToDelete);
 
-    String csvDataUpdated = const ListToCsvConverter().convert(rows, convertNullTo: '');
+    String csvDataUpdated =
+        const ListToCsvConverter().convert(rows, convertNullTo: '');
     await file.writeAsString(csvDataUpdated);
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/files_controller.dart';
@@ -54,8 +56,14 @@ class _ElectronicSignatureState extends State<ElectronicSignature> {
     if (_signatureController.isNotEmpty) {
       final image = await _signatureController.toPngBytes();
       if (image != null) {
-        sl<FilesController>().saveImageToDirectory(image, employeeID);
-        Navigator.pushNamed(context, '/confirmSave');
+        const isPic = false;
+        sl<FilesController>().saveImageToDirectory(image, employeeID, isPic);
+
+        if (sl<FilesController>().isWorkIdPhotoSubmitted) {
+          Navigator.pushNamed(context, '/confirmSave');
+        } else {
+          Navigator.pushNamed(context, '/deliveryDriver');
+        }
       }
     }
   }

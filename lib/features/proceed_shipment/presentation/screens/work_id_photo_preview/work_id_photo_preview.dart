@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -23,11 +25,18 @@ class WorkIdPhotoPreview extends StatelessWidget {
 
   void _onConfirm(BuildContext context) async {
     final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
+    const isPic = true;
     if (await File(image.path).exists()) {
       final imageBytes = await File(image.path).readAsBytes();
       if (imageBytes.isNotEmpty) {
-        sl<FilesController>().saveImageToDirectory(imageBytes, employee.id);
-        Navigator.pushNamed(context, '/confirmSave');
+        sl<FilesController>()
+            .saveImageToDirectory(imageBytes, employee.id, isPic);
+
+        if (sl<FilesController>().isElectronicSignatureSubmitted) {
+          Navigator.pushNamed(context, '/confirmSave');
+        } else {
+          Navigator.pushNamed(context, '/deliveryDriver');
+        }
       } else {
         print('Error: Image file is empty');
       }
