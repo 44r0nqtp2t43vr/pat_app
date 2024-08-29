@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_title_text.dart';
-import 'package:pat_app/features/proceed_shipment/presentation/screens/work_id_photo/work_id_photo_preview.dart';
 
 class WorkIdPhoto extends StatefulWidget {
   const WorkIdPhoto({super.key});
@@ -16,27 +17,45 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
   late CameraController _cameraController;
   late Future<void> _initializeControllerFuture;
 
+  Future<void> _initializeCamera() async {
+    try {
+      final cameras = await availableCameras();
+
+      final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+
+      _cameraController = CameraController(
+        frontCamera,
+        ResolutionPreset.high,
+      );
+
+      await _cameraController.initialize();
+    } catch (e) {
+      print('Error initializing camera: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> _takePicture() async {
+    try {
+      await _initializeControllerFuture;
+
+      final image = await _cameraController.takePicture();
+
+      if (!mounted) return;
+
+      Navigator.pushReplacementNamed(context, '/workIdPreview', arguments: image);
+    } catch (e) {
+      print('Error taking picture: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _initializeControllerFuture = _initializeCamera();
-  }
-
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-
-    final frontCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
-
-    _cameraController = CameraController(
-      frontCamera,
-      ResolutionPreset.high,
-    );
-
-    await _cameraController.initialize();
-    return;
   }
 
   @override
@@ -58,8 +77,15 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
 
             return Stack(
               children: [
-                SizedBox.expand(
-                  child: CameraPreview(_cameraController),
+                Center(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _cameraController.value.previewSize!.height,
+                      height: _cameraController.value.previewSize!.width,
+                      child: CameraPreview(_cameraController),
+                    ),
+                  ),
                 ),
                 Positioned(
                   top: 0,
@@ -102,22 +128,5 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
         },
       ),
     );
-  }
-
-  Future<void> _takePicture() async {
-    try {
-      await _initializeControllerFuture;
-
-      final image = await _cameraController.takePicture();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WorkIdPhotoPreview(imagePath: image.path),
-        ),
-      );
-    } catch (e) {
-      print('Error taking picture: $e');
-    }
   }
 }

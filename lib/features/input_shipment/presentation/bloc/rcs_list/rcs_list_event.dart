@@ -1,15 +1,14 @@
 import 'package:equatable/equatable.dart';
-import 'package:pat_app/features/input_shipment/domain/models/get_rcs_list_data.dart';
 
 abstract class RCsListEvent extends Equatable {
-  final GetRCsListData? getRCsListData;
+  final String? getShippedItemsData;
 
-  const RCsListEvent({this.getRCsListData});
+  const RCsListEvent({this.getShippedItemsData});
 
   @override
-  List<Object> get props => [getRCsListData!];
+  List<Object> get props => [getShippedItemsData!];
 }
 
-class GetRCsListEvent extends RCsListEvent {
-  const GetRCsListEvent({GetRCsListData? getRCsListData}) : super(getRCsListData: getRCsListData);
+class GetShippedItemsEvent extends RCsListEvent {
+  const GetShippedItemsEvent({String? getShippedItemsData}) : super(getShippedItemsData: getShippedItemsData);
 }

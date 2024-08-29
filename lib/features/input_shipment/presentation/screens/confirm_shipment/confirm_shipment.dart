@@ -87,7 +87,7 @@ class ConfirmShipment extends StatelessWidget {
 
   void _onCancelButtonPressed(BuildContext context) {
     sl<SelectedRCsListController>().setSelectedRCsList([]);
-    BlocProvider.of<RCsListBloc>(context).add(const GetRCsListEvent());
+    BlocProvider.of<RCsListBloc>(context).add(const GetShippedItemsEvent());
     Navigator.pushNamed(context, '/selectVia');
   }
 

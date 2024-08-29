@@ -27,10 +27,12 @@ class AppButtonFreetext extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 40,
+      child: FittedBox(
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 40,
+          ),
         ),
       ),
     );

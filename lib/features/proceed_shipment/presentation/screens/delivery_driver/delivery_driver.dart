@@ -10,37 +10,42 @@ class DeliveryDriver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-          top: 40.0,
-          bottom: 40.0,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: AppTitleText(
-                title: TextMeaning.deliveryDriver,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 80.0,
+            bottom: 40.0,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: AppTitleText(
+                  title: TextMeaning.deliveryDriver,
+                ),
               ),
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: AppSubtitleText(
-                subtitle: TextMeaning.chooseOneFromTheOptionsBelow,
+              const SizedBox(height: 40),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: AppSubtitleText(
+                  subtitle: TextMeaning.chooseOneFromTheOptionsBelow,
+                ),
               ),
-            ),
-            AppBigButton(
-              onPressed: () => _onESignatureButtonPressed(context),
-              textMeaning: TextMeaning.electronicSignature,
-            ),
-            AppBigButton(
-              onPressed: () => _onWorkIdButtonPressed(context),
-              textMeaning: TextMeaning.workIDPhoto,
-            ),
-          ],
+              const SizedBox(height: 40),
+              AppBigButton(
+                onPressed: () => _onESignatureButtonPressed(context),
+                textMeaning: TextMeaning.electronicSignature,
+              ),
+              const SizedBox(height: 20),
+              AppBigButton(
+                onPressed: () => _onWorkIdButtonPressed(context),
+                textMeaning: TextMeaning.workIDPhoto,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:pat_app/core/controllers/language_controller.dart';
+import 'package:pat_app/core/widgets/app_error_container.dart';
+
+class PostError extends StatelessWidget {
+  const PostError({super.key});
+
+  dynamic callback(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) {
+          return;
+        }
+
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+            bottom: 40.0,
+          ),
+          child: AppErrorContainer(
+            errorTextMeaning: TextMeaning.dataError,
+            buttonTextMeaning: TextMeaning.backForCheck,
+            onPop: (context) => callback(context),
+          ),
+        ),
+      ),
+    );
+  }
+}

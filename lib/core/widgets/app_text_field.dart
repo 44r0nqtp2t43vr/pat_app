@@ -15,6 +15,7 @@ class AppTextField extends StatelessWidget {
   final bool required;
   final bool? enabled;
   final String? Function()? specialValidator;
+  final int? maxLines;
 
   const AppTextField({
     super.key,
@@ -27,6 +28,7 @@ class AppTextField extends StatelessWidget {
     this.required = false,
     this.specialValidator,
     this.enabled,
+    this.maxLines = 1,
   });
 
   @override
@@ -67,6 +69,7 @@ class AppTextField extends StatelessWidget {
           builder: (languageController) {
             return TextFormField(
               controller: controller,
+              maxLines: maxLines,
               readOnly: enabled == null || enabled == true ? false : true,
               keyboardType: dataType != DataType.integer ? null : const TextInputType.numberWithOptions(),
               inputFormatters: dataType != DataType.integer ? null : [FilteringTextInputFormatter.digitsOnly],

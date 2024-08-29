@@ -9,6 +9,6 @@ abstract class EmployeeEvent extends Equatable {
   List<Object> get props => [employeeID!];
 }
 
-class LoginEmployeeEvent extends EmployeeEvent {
-  const LoginEmployeeEvent(String? employeeID) : super(employeeID: employeeID);
+class CheckUserInformationEvent extends EmployeeEvent {
+  const CheckUserInformationEvent(String? employeeID) : super(employeeID: employeeID);
 }

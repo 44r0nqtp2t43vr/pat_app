@@ -12,7 +12,6 @@ import 'package:pat_app/core/widgets/app_subtitle_text.dart';
 // import 'package:pat_app/core/widgets/app_search_box.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_state.dart';
-import 'package:pat_app/features/input_shipment/domain/models/get_rcs_list_data.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_event.dart';
 import 'package:pat_app/injection_container.dart';
@@ -54,12 +53,10 @@ class _SelectViaState extends State<SelectVia> {
 
   void _confirmSelected(BuildContext context) {
     if (_rcnoController.text.trim().isNotEmpty && _formKey.currentState!.validate()) {
-      // get rcs list
-      BlocProvider.of<RCsListBloc>(context).add(GetRCsListEvent(getRCsListData: GetRCsListData(filterString: _rcnoController.text.trim())));
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _rcnoController.text.trim()));
       Navigator.pushNamed(context, '/selectEntries');
     } else if (_selectedCustomer != null) {
-      // get rcs list
-      BlocProvider.of<RCsListBloc>(context).add(GetRCsListEvent(getRCsListData: GetRCsListData(isTextInput: false, filterString: _selectedCustomer!)));
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _selectedCustomer!));
       Navigator.pushNamed(context, '/selectEntries');
     }
   }
@@ -105,11 +102,6 @@ class _SelectViaState extends State<SelectVia> {
 
                   return Column(
                     children: [
-                      // AppSearchBox(
-                      //   labelText: TextMeaning.rcNo,
-                      //   textController: _searchController,
-                      // ),
-                      // const SizedBox(height: 8),
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: AppSubtitleText(
@@ -159,12 +151,6 @@ class _SelectViaState extends State<SelectVia> {
                     ],
                   );
                 }
-                // if (state is EmployeeError) {
-                //   return const AppErrorContainer(
-                //     errorTextMeaning: TextMeaning.dataError,
-                //     buttonTextMeaning: TextMeaning.backForCheck,
-                //   );
-                // }
                 return const Center(child: CupertinoActivityIndicator());
               },
             ),

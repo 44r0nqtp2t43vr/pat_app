@@ -1,15 +1,24 @@
-class RC {
-  final String rcno;
-  final String date;
-  final String customerName;
-  final String productPartNumber;
-  final int numberOfShipmentBoxes;
+import 'package:equatable/equatable.dart';
 
-  RC({
-    required this.rcno,
-    required this.date,
+class RC extends Equatable {
+  final String shippedItem;
+  final String customerName;
+  final String shipTo;
+  final int totalNumberOfShipmentBoxes;
+
+  const RC({
+    required this.shippedItem,
     required this.customerName,
-    required this.productPartNumber,
-    required this.numberOfShipmentBoxes,
+    required this.shipTo,
+    required this.totalNumberOfShipmentBoxes,
   });
+
+  @override
+  List<Object> get props => [shippedItem, customerName, shipTo, totalNumberOfShipmentBoxes];
+
+  RC.fromJson(Map<String, dynamic> json)
+      : shippedItem = json['Shipped item'],
+        customerName = json['Customer Name'],
+        shipTo = json['Ship to'],
+        totalNumberOfShipmentBoxes = json['Total Number of Shipment Boxes'];
 }

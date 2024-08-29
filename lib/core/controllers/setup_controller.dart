@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class SetupController extends GetxController {
-  Rx<String> serverIP = Rx<String>("");
+  Rx<String> serverIP = Rx<String>("https://turncard.topfuntek.com/");
   Rx<int> timeoutSec = Rx<int>(5);
 
   String getServerIP() {

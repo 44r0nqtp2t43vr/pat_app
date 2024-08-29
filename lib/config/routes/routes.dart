@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/employee_id_error/employee_id_error.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
@@ -12,7 +13,9 @@ import 'package:pat_app/features/input_shipment/presentation/screens/select_via/
 import 'package:pat_app/features/proceed_shipment/presentation/screens/confirm_save/confirm_save.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/delivery_driver/delivery_driver.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/electronic_signature/electronic_signature.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/screens/post_error/post_error.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/screens/work_id_photo/work_id_photo.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/screens/work_id_photo_preview/work_id_photo_preview.dart';
 import 'package:pat_app/features/setup/presentation/screens/input_password/input_password.dart';
 import 'package:pat_app/features/setup/presentation/screens/input_setup/input_setup.dart';
 import 'package:pat_app/features/setup/presentation/screens/password_error/password_error.dart';
@@ -68,8 +71,14 @@ class AppRoutes {
       case '/workId':
         return _materialRoute(const WorkIdPhoto());
 
+      case '/workIdPreview':
+        return _materialRoute(WorkIdPhotoPreview(image: settings.arguments as XFile));
+
       case '/confirmSave':
         return _materialRoute(const ConfirmSave());
+
+      case '/postError':
+        return _materialRoute(const PostError());
 
       default:
         return _materialRoute(const MainMenu());
