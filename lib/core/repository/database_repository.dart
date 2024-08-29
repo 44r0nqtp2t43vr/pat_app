@@ -93,23 +93,56 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     final timeoutSec = sl<SetupController>().getTimeoutSec();
     const api = "catalog/get_shipped_result/";
 
+    const electronicSignatureFileName = "Electronic Signature.jpg";
+    const workIdPhotoFileName = "Work ID Photo.jpg";
+    const recordFileName = "Record.txt";
+
     final electronicSignatureUint8List = sl<FilesController>().getElectronicSignature();
     final workIdPhotoUint8List = sl<FilesController>().getWorkIdPhoto();
 
     final splitData = data.split('\n');
     final employeeID = splitData[0];
-    final shippedItem = splitData[1];
+    final shippedItems = splitData[1];
 
     try {
-      final electronicSignatureFile = await sl<FilesController>().saveImageToDirectory(electronicSignatureUint8List, 'signature.png');
-      final workIdPhotoFile = await sl<FilesController>().saveImageToDirectory(workIdPhotoUint8List, 'workIdPic.jpg');
-
       // multipart form post
+      var request = http.MultipartRequest('POST', Uri.parse("$serverIP$api"));
+      final electronicSignatureImg = http.MultipartFile.fromBytes('Electronic Signature', electronicSignatureUint8List, filename: electronicSignatureFileName);
+      final workIdPhotoImg = http.MultipartFile.fromBytes('Work ID Photo', workIdPhotoUint8List, filename: workIdPhotoFileName);
 
-      // rename folder
-      final folderName = '${dateTimeToFolderName(DateTime.now())}_$employeeID';
+      request.files.add(electronicSignatureImg);
+      request.files.add(workIdPhotoImg);
 
-      return ShippedResult.fromJson({"Employee_ID": employeeID, "Shipped items": shippedItem});
+      request.fields['Employee_ID'] = employeeID;
+      request.fields['Shipped items'] = shippedItems;
+
+      // Send the request
+      final streamedResponse = await request.send().timeout(Duration(seconds: timeoutSec));
+
+      // Wait for the response
+      final response = await http.Response.fromStream(streamedResponse).timeout(Duration(seconds: timeoutSec));
+      final now = DateTime.now();
+
+      // Check the response status code
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
+
+      final responseData = json.decode(response.body);
+
+      // Check the response data status
+      if (responseData['status'] != "OK") {
+        throw Exception(responseData['detail']);
+      }
+
+      // Save images to directory
+      final folderName = '${dateTimeToFolderName(now)}_$employeeID';
+      await sl<FilesController>().saveImageToDirectory(electronicSignatureUint8List, folderName, electronicSignatureFileName);
+      await sl<FilesController>().saveImageToDirectory(workIdPhotoUint8List, folderName, workIdPhotoFileName);
+      await sl<FilesController>().saveTextToFile("$employeeID,$shippedItems", folderName, recordFileName);
+
+      // Return the result from the JSON response
+      return ShippedResult.fromJson(responseData['data']);
     } on SocketException catch (_) {
       throw const SocketException("");
     } on TimeoutException catch (_) {
