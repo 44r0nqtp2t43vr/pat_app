@@ -7,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/files_controller.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
+import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/widgets/app_button.dart';
 import 'package:pat_app/core/widgets/app_title_text.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/bloc/shipped_result/shipped_result_bloc.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/bloc/shipped_result/shipped_result_event.dart';
 import 'package:pat_app/injection_container.dart';
 
 class WorkIdPhotoPreview extends StatelessWidget {
@@ -24,18 +27,22 @@ class WorkIdPhotoPreview extends StatelessWidget {
   // }
 
   void _onConfirm(BuildContext context) async {
-    final employee = BlocProvider.of<EmployeeBloc>(context).state.employee!;
-    const isPic = true;
     if (await File(image.path).exists()) {
       final imageBytes = await File(image.path).readAsBytes();
       if (imageBytes.isNotEmpty) {
-        sl<FilesController>()
-            .saveImageToDirectory(imageBytes, employee.id, isPic);
+        sl<FilesController>().setWorkIdPhoto(imageBytes);
 
         if (sl<FilesController>().isElectronicSignatureSubmitted) {
-          Navigator.pushNamed(context, '/confirmSave');
+          final employee = BlocProvider.of<EmployeeBloc>(context).state.employee;
+          final shippedItems = sl<SelectedRCsListController>().getSelectedRCsList();
+
+          final employeeID = employee!.id;
+          final shippedItemsString = shippedItems.map((item) => item.shippedItem).toList().join(',');
+
+          BlocProvider.of<ShippedResultBloc>(context).add(GetShippedResultEvent(getShippedResultData: "$employeeID\n$shippedItemsString"));
+          Navigator.pushReplacementNamed(context, '/confirmSave');
         } else {
-          Navigator.pushNamed(context, '/deliveryDriver');
+          Navigator.of(context).pop();
         }
       } else {
         print('Error: Image file is empty');
@@ -47,43 +54,53 @@ class WorkIdPhotoPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 40.0,
-            bottom: 40.0,
-          ),
-          child: Column(
-            children: [
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: AppTitleText(
-                  title: TextMeaning.workIDPhoto,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) {
+          return;
+        }
+
+        Navigator.pushReplacementNamed(context, '/workId');
+      },
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              top: 40.0,
+              bottom: 40.0,
+            ),
+            child: Column(
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: AppTitleText(
+                    title: TextMeaning.workIDPhoto,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Image.file(
-                  File(image.path),
+                Expanded(
+                  child: Image.file(
+                    File(image.path),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              AppButton(
-                onPressed: () => _onWorkIdButtonPressed(context),
-                textMeaning: TextMeaning.retakePhoto,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              AppButton(
-                onPressed: () => _onConfirm(context),
-                textMeaning: TextMeaning.confirm,
-              ),
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                AppButton(
+                  onPressed: () => _onWorkIdButtonPressed(context),
+                  textMeaning: TextMeaning.retakePhoto,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AppButton(
+                  onPressed: () => _onConfirm(context),
+                  textMeaning: TextMeaning.confirm,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -91,6 +108,6 @@ class WorkIdPhotoPreview extends StatelessWidget {
   }
 
   void _onWorkIdButtonPressed(BuildContext context) {
-    Navigator.pushNamed(context, '/workId');
+    Navigator.pushReplacementNamed(context, '/workId');
   }
 }

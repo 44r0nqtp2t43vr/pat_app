@@ -53,10 +53,10 @@ class _SelectViaState extends State<SelectVia> {
 
   void _confirmSelected(BuildContext context) {
     if (_rcnoController.text.trim().isNotEmpty && _formKey.currentState!.validate()) {
-      BlocProvider.of<RCsListBloc>(context).add(GetRCsListEvent(getRCsListData: _rcnoController.text.trim()));
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _rcnoController.text.trim()));
       Navigator.pushNamed(context, '/selectEntries');
     } else if (_selectedCustomer != null) {
-      BlocProvider.of<RCsListBloc>(context).add(GetRCsListEvent(getRCsListData: _selectedCustomer!));
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _selectedCustomer!));
       Navigator.pushNamed(context, '/selectEntries');
     }
   }
@@ -102,11 +102,6 @@ class _SelectViaState extends State<SelectVia> {
 
                   return Column(
                     children: [
-                      // AppSearchBox(
-                      //   labelText: TextMeaning.rcNo,
-                      //   textController: _searchController,
-                      // ),
-                      // const SizedBox(height: 8),
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: AppSubtitleText(
@@ -156,12 +151,6 @@ class _SelectViaState extends State<SelectVia> {
                     ],
                   );
                 }
-                // if (state is EmployeeError) {
-                //   return const AppErrorContainer(
-                //     errorTextMeaning: TextMeaning.dataError,
-                //     buttonTextMeaning: TextMeaning.backForCheck,
-                //   );
-                // }
                 return const Center(child: CupertinoActivityIndicator());
               },
             ),

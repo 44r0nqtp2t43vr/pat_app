@@ -3,6 +3,7 @@ import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/widgets/app_error_container.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_state.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_state.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/bloc/shipped_result/shipped_result_state.dart';
 
 class NetworkError extends StatelessWidget {
   final dynamic state;
@@ -14,6 +15,9 @@ class NetworkError extends StatelessWidget {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     } else if (state is RCsListError) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    } else if (state is ShippedResultError) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     }

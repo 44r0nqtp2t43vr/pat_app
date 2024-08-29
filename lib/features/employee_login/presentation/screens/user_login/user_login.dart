@@ -22,7 +22,7 @@ class _UserLoginState extends State<UserLogin> {
   void _loginUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       sl<SelectedRCsListController>().setSelectedRCsList([]);
-      BlocProvider.of<EmployeeBloc>(context).add(LoginEmployeeEvent(_employeeIDController.text));
+      BlocProvider.of<EmployeeBloc>(context).add(CheckUserInformationEvent(_employeeIDController.text));
       Navigator.pushNamed(context, '/selectVia');
     }
   }

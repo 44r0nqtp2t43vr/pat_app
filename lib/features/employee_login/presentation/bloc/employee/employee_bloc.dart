@@ -1,22 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pat_app/features/employee_login/domain/usecases/login_employee.dart';
+import 'package:pat_app/features/employee_login/domain/usecases/check_user_information.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_event.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_state.dart';
 
 class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
-  final LoginEmployeeUseCase _loginEmployeeUseCase;
+  final CheckUserInformationUseCase _checkUserInformationUseCase;
 
   EmployeeBloc(
-    this._loginEmployeeUseCase,
+    this._checkUserInformationUseCase,
   ) : super(const EmployeeLoading()) {
-    on<LoginEmployeeEvent>(onLoginEmployee);
+    on<CheckUserInformationEvent>(onCheckUserInformation);
   }
 
-  void onLoginEmployee(LoginEmployeeEvent event, Emitter<EmployeeState> emit) async {
+  void onCheckUserInformation(CheckUserInformationEvent event, Emitter<EmployeeState> emit) async {
     emit(const EmployeeLoading());
 
     try {
-      final employee = await _loginEmployeeUseCase(params: event.employeeID!);
+      final employee = await _checkUserInformationUseCase(params: event.employeeID!);
 
       emit(EmployeeDone(employee: employee));
     } catch (e) {

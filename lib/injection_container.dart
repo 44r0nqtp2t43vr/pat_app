@@ -6,10 +6,12 @@ import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
 import 'package:pat_app/core/controllers/setup_controller.dart';
 import 'package:pat_app/core/interface/database_repository.dart';
 import 'package:pat_app/core/repository/database_repository.dart';
-import 'package:pat_app/features/employee_login/domain/usecases/login_employee.dart';
+import 'package:pat_app/features/employee_login/domain/usecases/check_user_information.dart';
 import 'package:pat_app/features/employee_login/presentation/bloc/employee/employee_bloc.dart';
-import 'package:pat_app/features/input_shipment/domain/usecases/get_rcs_list.dart';
+import 'package:pat_app/features/input_shipment/domain/usecases/get_shipped_items.dart';
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
+import 'package:pat_app/features/proceed_shipment/domain/usecases/get_shipped_result.dart';
+import 'package:pat_app/features/proceed_shipment/presentation/bloc/shipped_result/shipped_result_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -36,13 +38,17 @@ Future<void> initializeDependencies() async {
 
   // UseCases
 
-  sl.registerSingleton<LoginEmployeeUseCase>(LoginEmployeeUseCase(sl()));
+  sl.registerSingleton<CheckUserInformationUseCase>(CheckUserInformationUseCase(sl()));
 
-  sl.registerSingleton<GetRCsListUseCase>(GetRCsListUseCase(sl()));
+  sl.registerSingleton<GetShippedItemsUseCase>(GetShippedItemsUseCase(sl()));
+
+  sl.registerSingleton<GetShippedResultUseCase>(GetShippedResultUseCase(sl()));
 
   // Blocs
 
   sl.registerFactory<EmployeeBloc>(() => EmployeeBloc(sl()));
 
   sl.registerFactory<RCsListBloc>(() => RCsListBloc(sl()));
+
+  sl.registerFactory<ShippedResultBloc>(() => ShippedResultBloc(sl()));
 }

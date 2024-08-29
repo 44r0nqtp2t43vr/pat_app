@@ -17,12 +17,6 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
   late CameraController _cameraController;
   late Future<void> _initializeControllerFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeControllerFuture = _initializeCamera();
-  }
-
   Future<void> _initializeCamera() async {
     try {
       final cameras = await availableCameras();
@@ -42,6 +36,26 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
       print('Error initializing camera: $e');
       rethrow;
     }
+  }
+
+  Future<void> _takePicture() async {
+    try {
+      await _initializeControllerFuture;
+
+      final image = await _cameraController.takePicture();
+
+      if (!mounted) return;
+
+      Navigator.pushReplacementNamed(context, '/workIdPreview', arguments: image);
+    } catch (e) {
+      print('Error taking picture: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeControllerFuture = _initializeCamera();
   }
 
   @override
@@ -114,19 +128,5 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
         },
       ),
     );
-  }
-
-  Future<void> _takePicture() async {
-    try {
-      await _initializeControllerFuture;
-
-      final image = await _cameraController.takePicture();
-
-      if (!mounted) return;
-
-      Navigator.pushNamed(context, '/workIdPreview', arguments: image);
-    } catch (e) {
-      print('Error taking picture: $e');
-    }
   }
 }
