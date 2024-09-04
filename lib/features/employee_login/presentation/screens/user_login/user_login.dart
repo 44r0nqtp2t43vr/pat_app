@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pat_app/core/controllers/language_controller.dart';
 import 'package:pat_app/core/controllers/selected_rcs_list_controller.dart';
@@ -39,30 +40,65 @@ class _UserLoginState extends State<UserLogin> {
         }
 
         if (isEntryIndexNull) {
-          Navigator.pushReplacementNamed(context, '/');
+          SystemNavigator.pop();
         }
       },
       child: Scaffold(
         body: Form(
           key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                AppTextField(
-                  controller: _employeeIDController,
-                  mainLabel: TextMeaning.employeeID,
-                ),
-                AppButton(
-                  onPressed: () => _loginUser(context),
-                  textMeaning: TextMeaning.login,
-                ),
-              ],
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => _onLanguageButtonPressed(),
+                      child: const Text(
+                        "中/EN",
+                        style: TextStyle(
+                          fontSize: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 80),
+                  AppTextField(
+                    controller: _employeeIDController,
+                    mainLabel: TextMeaning.employeeID,
+                  ),
+                  const SizedBox(height: 120),
+                  AppButton(
+                    onPressed: () => _loginUser(context),
+                    textMeaning: TextMeaning.login,
+                  ),
+                  const SizedBox(height: 160),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () => _onSetupButtonPressed(context),
+                      child: const Icon(
+                        Icons.settings,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _onLanguageButtonPressed() {
+    sl<LanguageController>().toggleCurrentLanguage();
+  }
+
+  void _onSetupButtonPressed(BuildContext context) {
+    Navigator.pushNamed(context, '/inputPassword');
   }
 }

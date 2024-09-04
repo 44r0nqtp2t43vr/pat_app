@@ -27,7 +27,7 @@ class AppBigButton extends StatelessWidget {
             controller.translate(textMeaning),
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
           );

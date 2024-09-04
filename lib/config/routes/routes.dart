@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/employee_id_error/employee_id_error.dart';
-import 'package:pat_app/features/employee_login/presentation/screens/main_menu/main_menu.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/network_error/network_error.dart';
 import 'package:pat_app/features/employee_login/presentation/screens/user_login/user_login.dart';
 import 'package:pat_app/features/input_shipment/presentation/screens/check_shipment/check_shipment.dart';
@@ -24,7 +23,7 @@ class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return _materialRoute(const MainMenu());
+        return _materialRoute(const UserLogin());
 
       case '/inputPassword':
         return _materialRoute(const InputPassword());
@@ -81,7 +80,7 @@ class AppRoutes {
         return _materialRoute(const PostError());
 
       default:
-        return _materialRoute(const MainMenu());
+        return _materialRoute(const UserLogin());
     }
   }
 

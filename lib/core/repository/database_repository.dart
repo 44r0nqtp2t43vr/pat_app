@@ -123,17 +123,17 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       final response = await http.Response.fromStream(streamedResponse).timeout(Duration(seconds: timeoutSec));
       final now = DateTime.now();
 
-      // Check the response status code
-      if (response.statusCode != 200) {
-        throw Exception();
-      }
-
       final responseData = json.decode(response.body);
 
-      // Check the response data status
-      if (responseData['status'] != "OK") {
+      // Check the response status code
+      if (response.statusCode != 200 || responseData['status'] != "OK") {
         throw Exception(responseData['detail']);
       }
+
+      // Check the response data status
+      // if (responseData['status'] != "OK") {
+      //   throw Exception(responseData['detail']);
+      // }
 
       // Save images to directory
       final folderName = '${dateTimeToFolderName(now)}_$employeeID';
@@ -142,7 +142,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       await sl<FilesController>().saveTextToFile("$employeeID,$shippedItems", folderName, recordFileName);
 
       // Return the result from the JSON response
-      return ShippedResult.fromJson(responseData['data']);
+      return ShippedResult.fromJson(responseData['data'], responseData['tip_messages']);
     } on SocketException catch (_) {
       throw const SocketException("");
     } on TimeoutException catch (_) {

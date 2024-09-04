@@ -73,7 +73,7 @@ class _SelectViaState extends State<SelectVia> {
         }
 
         if (isEntryIndexNull) {
-          Navigator.pushReplacementNamed(context, '/userLogin');
+          Navigator.pushReplacementNamed(context, '/');
         }
       },
       child: Scaffold(
