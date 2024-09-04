@@ -48,6 +48,7 @@ enum TextMeaning {
   viaCustomer,
   shippedItems,
   shipTo,
+  ok,
 }
 
 class LanguageController extends GetxController {
@@ -156,6 +157,8 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "Shipped items" : "出貨項目";
       case TextMeaning.shipTo:
         return getCurrentLanguage() == Language.english ? "Ship To" : "Ship To";
+      case TextMeaning.ok:
+        return getCurrentLanguage() == Language.english ? "OK" : "OK";
       default:
         return "BUTTON";
     }
