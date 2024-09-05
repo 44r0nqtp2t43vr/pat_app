@@ -96,7 +96,7 @@ class _SelectEntriesState extends State<SelectEntries> {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
+                        physics: const ClampingScrollPhysics(),
                         itemCount: filteredRCsList.length,
                         itemBuilder: (context, index) {
                           final rc = filteredRCsList[index];

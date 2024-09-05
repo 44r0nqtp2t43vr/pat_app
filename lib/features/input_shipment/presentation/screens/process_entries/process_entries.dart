@@ -101,7 +101,7 @@ class _ProcessEntriesState extends State<ProcessEntries> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     child: Column(
                       children: isFirstPage
                           ? [
