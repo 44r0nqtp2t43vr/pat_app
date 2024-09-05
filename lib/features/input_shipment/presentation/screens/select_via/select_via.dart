@@ -127,7 +127,7 @@ class _SelectViaState extends State<SelectVia> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
+                          physics: const ClampingScrollPhysics(),
                           itemCount: customers.length,
                           itemBuilder: (context, index) {
                             final customer = customers[index];

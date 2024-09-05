@@ -30,7 +30,7 @@ class _InputSetupState extends State<InputSetup> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
               const SizedBox(height: 40),

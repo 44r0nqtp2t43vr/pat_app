@@ -25,7 +25,7 @@ class CheckShipment extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 itemCount: selectedRCsList.length,
                 itemBuilder: (context, index) {
                   final rc = selectedRCsList[index];

@@ -46,47 +46,42 @@ class _UserLoginState extends State<UserLogin> {
       child: Scaffold(
         body: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => _onLanguageButtonPressed(),
-                      child: const Text(
-                        "中/EN",
-                        style: TextStyle(
-                          fontSize: 28,
-                        ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => _onLanguageButtonPressed(),
+                    child: const Text(
+                      "中/EN",
+                      style: TextStyle(
+                        fontSize: 28,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 80),
-                  AppTextField(
-                    controller: _employeeIDController,
-                    mainLabel: TextMeaning.employeeID,
-                  ),
-                  const SizedBox(height: 120),
-                  AppButton(
-                    onPressed: () => _loginUser(context),
-                    textMeaning: TextMeaning.login,
-                  ),
-                  const SizedBox(height: 160),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () => _onSetupButtonPressed(context),
-                      child: const Icon(
-                        Icons.settings,
-                        size: 28,
-                      ),
+                ),
+                AppTextField(
+                  controller: _employeeIDController,
+                  mainLabel: TextMeaning.employeeID,
+                ),
+                AppButton(
+                  onPressed: () => _loginUser(context),
+                  textMeaning: TextMeaning.login,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () => _onSetupButtonPressed(context),
+                    child: const Icon(
+                      Icons.settings,
+                      size: 28,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
