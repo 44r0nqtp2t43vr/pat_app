@@ -12,11 +12,14 @@ import 'package:pat_app/features/input_shipment/domain/usecases/get_shipped_item
 import 'package:pat_app/features/input_shipment/presentation/bloc/rcs_list/rcs_list_bloc.dart';
 import 'package:pat_app/features/proceed_shipment/domain/usecases/get_shipped_result.dart';
 import 'package:pat_app/features/proceed_shipment/presentation/bloc/shipped_result/shipped_result_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   // Dependencies
+
+  sl.registerSingleton<SharedPreferencesAsync>(SharedPreferencesAsync());
 
   sl.registerSingleton<DatabaseRepository>(DatabaseRepositoryImpl());
 
