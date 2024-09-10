@@ -21,13 +21,13 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
     try {
       final cameras = await availableCameras();
 
-      final frontCamera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.front,
+      final backCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
 
       _cameraController = CameraController(
-        frontCamera,
+        backCamera,
         ResolutionPreset.high,
       );
 
@@ -46,7 +46,8 @@ class _WorkIdPhotoState extends State<WorkIdPhoto> {
 
       if (!mounted) return;
 
-      Navigator.pushReplacementNamed(context, '/workIdPreview', arguments: image);
+      Navigator.pushReplacementNamed(context, '/workIdPreview',
+          arguments: image);
     } catch (e) {
       print('Error taking picture: $e');
     }
