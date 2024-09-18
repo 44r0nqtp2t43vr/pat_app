@@ -6,8 +6,15 @@ class AppButton extends StatelessWidget {
   final Function() onPressed;
   final Function()? onLongPressed;
   final TextMeaning textMeaning;
+  final double fontSize;
 
-  const AppButton({super.key, required this.onPressed, this.onLongPressed, required this.textMeaning});
+  const AppButton({
+    super.key,
+    required this.onPressed,
+    this.onLongPressed,
+    required this.textMeaning,
+    this.fontSize = 32,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +32,8 @@ class AppButton extends StatelessWidget {
         builder: (controller) {
           return Text(
             controller.translate(textMeaning),
-            style: const TextStyle(
-              fontSize: 32,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.bold,
             ),
           );

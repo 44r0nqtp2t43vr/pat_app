@@ -25,6 +25,7 @@ class SelectVia extends StatefulWidget {
 
 class _SelectViaState extends State<SelectVia> {
   String? _selectedCustomer;
+  final List<String> _selectedShippingNos = [];
   // final TextEditingController _searchController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -52,9 +53,78 @@ class _SelectViaState extends State<SelectVia> {
   }
 
   void _confirmSelected(BuildContext context) {
-    if (_rcnoController.text.trim().isNotEmpty && _formKey.currentState!.validate()) {
-      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _rcnoController.text.trim()));
+    if (_rcnoController.text.trim().isEmpty && _selectedShippingNos.isNotEmpty) {
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
       Navigator.pushNamed(context, '/selectEntries');
+      return;
+    }
+
+    if (_rcnoController.text.trim().isNotEmpty && _formKey.currentState!.validate()) {
+      final selectedShippingNo = _rcnoController.text.trim();
+
+      if (!_selectedShippingNos.contains(selectedShippingNo)) {
+        setState(() {
+          _rcnoController.text = "";
+          _selectedShippingNos.add(selectedShippingNo);
+        });
+      }
+
+      if (selectedShippingNo.startsWith("S") && selectedShippingNo.length == 14) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(20),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const AppSubtitleText(
+                    subtitle: TextMeaning.viaShippingNo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(height: 20),
+                  const AppSubtitleText(
+                    subtitle: TextMeaning.continueAdding,
+                    fontSize: 24,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: AppButton(
+                          onPressed: () {
+                            BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
+                            Navigator.of(context).pop();
+                            Navigator.pushNamed(context, '/selectEntries');
+                          },
+                          textMeaning: TextMeaning.confirm,
+                          fontSize: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        flex: 3,
+                        child: AppButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          textMeaning: TextMeaning.add,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      } else {
+        BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
+        Navigator.pushNamed(context, '/selectEntries');
+      }
     } else if (_selectedCustomer != null) {
       BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _selectedCustomer!));
       Navigator.pushNamed(context, '/selectEntries');
@@ -77,6 +147,7 @@ class _SelectViaState extends State<SelectVia> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Form(
           key: _formKey,
           child: Padding(
@@ -116,6 +187,26 @@ class _SelectViaState extends State<SelectVia> {
                           fontSize: 28,
                         ),
                       ),
+                      _selectedShippingNos.isNotEmpty
+                          ? Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const ClampingScrollPhysics(),
+                                itemCount: _selectedShippingNos.length,
+                                itemBuilder: (context, index) {
+                                  final selectedShippingNo = _selectedShippingNos[index];
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: AppButtonFreetext(
+                                      onPressed: () {},
+                                      text: selectedShippingNo,
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          : const SizedBox(),
                       const SizedBox(height: 20),
                       const Align(
                         alignment: Alignment.centerLeft,
