@@ -5,8 +5,14 @@ import 'package:pat_app/core/controllers/language_controller.dart';
 class AppSubtitleText extends StatelessWidget {
   final TextMeaning subtitle;
   final double fontSize;
+  final FontWeight? fontWeight;
 
-  const AppSubtitleText({super.key, required this.subtitle, this.fontSize = 32});
+  const AppSubtitleText({
+    super.key,
+    required this.subtitle,
+    this.fontSize = 32,
+    this.fontWeight,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class AppSubtitleText extends StatelessWidget {
           controller.translate(subtitle),
           style: TextStyle(
             fontSize: fontSize,
+            fontWeight: fontWeight,
           ),
         );
       },

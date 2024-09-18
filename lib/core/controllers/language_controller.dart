@@ -49,6 +49,8 @@ enum TextMeaning {
   shippedItems,
   shipTo,
   ok,
+  continueAdding,
+  add,
 }
 
 class LanguageController extends GetxController {
@@ -159,6 +161,10 @@ class LanguageController extends GetxController {
         return getCurrentLanguage() == Language.english ? "Ship To" : "Ship To";
       case TextMeaning.ok:
         return getCurrentLanguage() == Language.english ? "OK" : "OK";
+      case TextMeaning.continueAdding:
+        return getCurrentLanguage() == Language.english ? "Continue adding?" : "Continue adding?";
+      case TextMeaning.add:
+        return getCurrentLanguage() == Language.english ? "ADD" : "ADD";
       default:
         return "BUTTON";
     }
