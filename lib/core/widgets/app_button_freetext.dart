@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppButtonFreetext extends StatelessWidget {
-  final Function() onPressed;
+  final Function()? onPressed;
   final Function()? onLongPressed;
   final String text;
   final Color? backgroundColor;
