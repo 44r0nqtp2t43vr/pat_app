@@ -26,10 +26,78 @@ class SelectVia extends StatefulWidget {
 class _SelectViaState extends State<SelectVia> {
   String? _selectedCustomer;
   final List<String> _selectedShippingNos = [];
-  // final TextEditingController _searchController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   final _rcnoController = TextEditingController();
+
+  void _addToSelectedShippingNos(String newSelectedShippingNo) {
+    if (!_selectedShippingNos.contains(newSelectedShippingNo)) {
+      setState(() {
+        _rcnoController.text = "";
+        _selectedShippingNos.add(newSelectedShippingNo);
+      });
+    }
+  }
+
+  void _onTextChanged() {
+    _autoDeselectCustomer();
+
+    final selectedShippingNo = _rcnoController.text.trim();
+    if (selectedShippingNo.startsWith("S") && selectedShippingNo.length == 14) {
+      _addToSelectedShippingNos(selectedShippingNo);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(20),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const AppSubtitleText(
+                  subtitle: TextMeaning.viaShippingNo,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 20),
+                const AppSubtitleText(
+                  subtitle: TextMeaning.continueAdding,
+                  fontSize: 24,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: AppButton(
+                        onPressed: () {
+                          BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
+                          Navigator.of(context).pop();
+                          Navigator.pushNamed(context, '/selectEntries');
+                        },
+                        textMeaning: TextMeaning.confirm,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      flex: 3,
+                      child: AppButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        textMeaning: TextMeaning.add,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
 
   void _autoDeselectCustomer() {
     if (_selectedCustomer != null) {
@@ -61,70 +129,10 @@ class _SelectViaState extends State<SelectVia> {
 
     if (_rcnoController.text.trim().isNotEmpty && _formKey.currentState!.validate()) {
       final selectedShippingNo = _rcnoController.text.trim();
+      _addToSelectedShippingNos(selectedShippingNo);
 
-      if (!_selectedShippingNos.contains(selectedShippingNo)) {
-        setState(() {
-          _rcnoController.text = "";
-          _selectedShippingNos.add(selectedShippingNo);
-        });
-      }
-
-      if (selectedShippingNo.startsWith("S") && selectedShippingNo.length == 14) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return AlertDialog(
-              contentPadding: const EdgeInsets.all(20),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const AppSubtitleText(
-                    subtitle: TextMeaning.viaShippingNo,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 20),
-                  const AppSubtitleText(
-                    subtitle: TextMeaning.continueAdding,
-                    fontSize: 24,
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: AppButton(
-                          onPressed: () {
-                            BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
-                            Navigator.of(context).pop();
-                            Navigator.pushNamed(context, '/selectEntries');
-                          },
-                          textMeaning: TextMeaning.confirm,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 3,
-                        child: AppButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          textMeaning: TextMeaning.add,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      } else {
-        BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
-        Navigator.pushNamed(context, '/selectEntries');
-      }
+      BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: "[${_selectedShippingNos.join(',')}]"));
+      Navigator.pushNamed(context, '/selectEntries');
     } else if (_selectedCustomer != null) {
       BlocProvider.of<RCsListBloc>(context).add(GetShippedItemsEvent(getShippedItemsData: _selectedCustomer!));
       Navigator.pushNamed(context, '/selectEntries');
@@ -182,7 +190,7 @@ class _SelectViaState extends State<SelectVia> {
                       ),
                       TextField(
                         controller: _rcnoController,
-                        onChanged: (value) => _autoDeselectCustomer(),
+                        onChanged: (value) => _onTextChanged(),
                         style: const TextStyle(
                           fontSize: 28,
                         ),
@@ -226,7 +234,7 @@ class _SelectViaState extends State<SelectVia> {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: AppButtonFreetext(
-                                onPressed: () => _selectOrDeselectCustomer(customer),
+                                onPressed: _selectedShippingNos.isEmpty ? () => _selectOrDeselectCustomer(customer) : null,
                                 text: customer,
                                 backgroundColor: _selectedCustomer != null && _selectedCustomer == customer ? Colors.blue[200] : null,
                               ),
